@@ -41,6 +41,7 @@ entity "Book" as book {
 author -- book : writes
 @enduml
 ```
+![Rendered diagram](docs/images/readme-example1.png)
 
 ### In this example:
 
@@ -64,6 +65,9 @@ After installation, ensure that the Graphviz bin directory is added to your syst
 ## Configure PlantUML Extension (if necessary):
 Open the settings (File > Preferences > Settings), search for PlantUML, and configure any necessary
 settings such as the PlantUML server or local render settings.
+
+* Make sure to set up 'java' location if it is not in path folder.
+* Configure output folder, default format, etc.
 
 ## Create a New PlantUML File:
 Create a new file with a .puml extension, and start modeling your entities as shown in the example above.

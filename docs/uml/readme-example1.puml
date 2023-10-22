@@ -1,0 +1,15 @@
+@startuml
+entity "Author" as author {
+  +AuthorID: int
+  FirstName: string
+  LastName: string
+}
+
+entity "Book" as book {
+  +BookID: int
+  Title: string
+  PublishedDate: date
+}
+
+author -- book : writes
+@enduml
