@@ -19,6 +19,16 @@ Typical features of Entity Modeling tools include:
 - Validation of model consistency and integrity.
 - Generation of database schemas or code from models.
 
+## Reference Architecture Catalogue
+
+Reference Architectures is well-known designs widely used in various companies that proved
+themselves as a standard way of doing something.
+
+[Catalogue](/catalogue/) contains a set of Reference Architectures described in PlantUML.
+
+See following examples of Reference Entity Models:
+* [CRM Reference Model](/catalogue/reference-models/crm.md)
+
 ## Designing an Entity Model using PlantUML
 
 PlantUML provides a simple and intuitive textual notation for creating diagrams, including entity models. Here’s a basic example of an entity model representing a simple bookstore:
