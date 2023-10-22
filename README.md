@@ -1,4 +1,3 @@
-# plantuml-ent-kit
 # Ent Kit: PlantUML-based Entity Modeling Toolkit with Reference Architecture Catalogue
 
 Ent Kit provides a comprehensive guide and examples for utilizing PlantUML to create entity
@@ -41,14 +40,18 @@ entity "Book" as book {
 author -- book : writes
 @enduml
 ```
-![Rendered diagram](docs/images/readme-example1.png)
 
 ### In this example:
 
 Two entities, Author and Book, are defined along with their attributes.
+
 A relationship is established between Author and Book indicating that an author writes a book.
-Setting up Visual Studio Code for PlantUML and Entity Modeling
-Follow these steps to set up VS Code for PlantUML and Entity Modeling:
+![Rendered diagram](docs/images/readme-example1.png)
+
+
+# Setting up Visual Studio Code for PlantUML and Entity Modeling
+
+Now follow below steps to set up VS Code for PlantUML and Entity Modeling.
 
 ## Install Visual Studio Code:
 
@@ -75,6 +78,8 @@ Create a new file with a .puml extension, and start modeling your entities as sh
 ## Viewing Your Diagrams:
 To view your diagrams, right-click anywhere in the editor and select PlantUML: Preview Current Diagram.
 Now, you are all set to start creating entity models using PlantUML in Visual Studio Code!
+![Render Diagrams In Visual Studio](/plantuml-ent-kit/docs/images/readme-screenshot2.png)
+
 
 # Contributing
 Feel free to contribute to this repository by submitting issues, improving the documentation, or submitting pull requests.
