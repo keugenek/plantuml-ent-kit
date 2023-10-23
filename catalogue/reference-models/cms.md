@@ -63,6 +63,7 @@ ContentItem -- Tag : tagged as
 
 @enduml
 ```
+![CMS System Design](images/cms.png)
 
 ## Entity Descriptions
 - User: Represents an individual user who can create content items and write comments.
