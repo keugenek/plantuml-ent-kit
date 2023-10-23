@@ -56,6 +56,7 @@ author -- book : writes
 Two entities, Author and Book, are defined along with their attributes.
 
 A relationship is established between Author and Book indicating that an author writes a book.
+
 ![Rendered diagram](docs/images/readme-example1.png)
 
 
@@ -88,7 +89,8 @@ Create a new file with a .puml extension, and start modeling your entities as sh
 ## Viewing Your Diagrams:
 To view your diagrams, right-click anywhere in the editor and select PlantUML: Preview Current Diagram.
 Now, you are all set to start creating entity models using PlantUML in Visual Studio Code!
-![Render Diagrams In Visual Studio](/plantuml-ent-kit/docs/images/readme-screenshot2.png)
+
+![Render Diagrams In Visual Studio](docs/images/readme-screenshot2.png)
 
 
 # Contributing
