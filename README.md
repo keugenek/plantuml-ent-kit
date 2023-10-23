@@ -27,8 +27,9 @@ themselves as a standard way of doing something.
 [Catalogue](/catalogue/) contains a set of Reference Architectures described in PlantUML.
 
 See following examples of Reference Entity Models:
-* [CRM Reference Model](/catalogue/reference-models/crm.md)
+* [Customer Relationship Management (CRM) System Reference Model](/catalogue/reference-models/crm.md)
 * [E-Commerce System Model](/catalogue/reference-models/ecomm.md)
+* [Learning Management System (LMS) Model](/catalogue/reference-models/ecomm.md)
 
 ## Designing an Entity Model using PlantUML
 
