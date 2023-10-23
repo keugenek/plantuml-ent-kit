@@ -62,6 +62,9 @@ A relationship is established between Author and Book indicating that an author 
 
 ![Rendered diagram](docs/images/readme-example1.png)
 
+## Template PlantUML Design Project
+
+The following repository can be used as a starting point for designing 
 
 # Setting up Visual Studio Code for PlantUML and Entity Modeling
 

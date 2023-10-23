@@ -1,0 +1,28 @@
+@startuml
+left to right direction
+actor "Sales Rep" as sales
+actor "Customer" as customer
+rectangle "Customer Management" {
+  sales -- (Create Customer Profile) : <<extends>>
+  (Create Customer Profile) -- (Update Customer Profile) : <<extends>>
+  (Create Customer Profile) -- (Delete Customer Profile) : <<extends>>
+  customer -- (View Customer Profile)
+}
+
+actor "Sales Rep" as sales
+rectangle "Sales Management" {
+  sales -- (Create Sales Opportunity) : <<extends>>
+  (Create Sales Opportunity) -- (Update Sales Opportunity) : <<extends>>
+  (Create Sales Opportunity) -- (Delete Sales Opportunity) : <<extends>>
+  (Create Sales Opportunity) -- (Convert Opportunity to Sale)
+}
+
+actor "Support Rep" as support
+actor "Customer" as customer
+rectangle "Support Management" {
+  customer -- (Create Support Case) : <<extends>>
+  (Create Support Case) -- (Update Support Case) : <<extends>>
+  (Create Support Case) -- (Close Support Case) : <<extends>>
+  support -- (Respond to Support Case)
+}
+@enduml

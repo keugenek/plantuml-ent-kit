@@ -102,3 +102,73 @@ Each Contact, Opportunity, Case, and Activity is associated with one Customer.
 Each Case may be associated with an Account.
 
 This simplified CRM model serves as a basis for understanding the relationships and interactions within a CRM system. It can be further expanded or modified to meet the specific needs of different organizations.
+
+# CRM System Use-Cases
+
+A CRM system is central to managing customer interactions, sales processes, and support services. Here are some valid use-cases to provide a complete picture of a CRM system's operations:
+
+## 1. Customer Management
+
+![CRM Use Cases](images/crm-se-cases.png)
+
+```plantuml
+@startuml
+left to right direction
+actor "Sales Rep" as sales
+actor "Customer" as customer
+rectangle "Customer Management" {
+  sales -- (Create Customer Profile) : <<extends>>
+  (Create Customer Profile) -- (Update Customer Profile) : <<extends>>
+  (Create Customer Profile) -- (Delete Customer Profile) : <<extends>>
+  customer -- (View Customer Profile)
+}
+@enduml
+```
+
+- Create Customer Profile: Sales representatives can create profiles for new customers.
+- Update Customer Profile: Sales representatives can update existing customer profiles.
+- Delete Customer Profile: Sales representatives can delete customer profiles.
+- View Customer Profile: Customers can view their own profiles.
+
+## 2. Sales Management
+
+```plantuml
+@startuml
+left to right direction
+actor "Sales Rep" as sales
+rectangle "Sales Management" {
+  sales -- (Create Sales Opportunity) : <<extends>>
+  (Create Sales Opportunity) -- (Update Sales Opportunity) : <<extends>>
+  (Create Sales Opportunity) -- (Delete Sales Opportunity) : <<extends>>
+  (Create Sales Opportunity) -- (Convert Opportunity to Sale)
+}
+@enduml
+```
+
+- Create Sales Opportunity: Sales representatives can create sales opportunities.
+- Update Sales Opportunity: Sales representatives can update existing sales opportunities.
+- Delete Sales Opportunity: Sales representatives can delete sales opportunities.
+- Convert Opportunity to Sale: Sales representatives can convert opportunities to actual sales.
+
+## 3. Support Management
+
+```plantuml
+@startuml
+left to right direction
+actor "Support Rep" as support
+actor "Customer" as customer
+rectangle "Support Management" {
+  customer -- (Create Support Case) : <<extends>>
+  (Create Support Case) -- (Update Support Case) : <<extends>>
+  (Create Support Case) -- (Close Support Case) : <<extends>>
+  support -- (Respond to Support Case)
+}
+@enduml
+```
+
+- Create Support Case: Customers can create support cases.
+- Update Support Case: Customers can update existing support cases.
+- Close Support Case: Customers can close resolved support cases.
+- Respond to Support Case: Support representatives can respond to support cases.
+
+These use-cases outline the core functionalities and interactions within a CRM system, enabling better customer relationship management, sales processes, and support services.
