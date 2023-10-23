@@ -1,0 +1,55 @@
+@startuml
+
+!define table(x) class x << (T,#FFAAAA) >>
+!define primary_key(x) <b>x</b>
+!define foreign_key(x) <color:red>x</color>
+
+table(User) {
+  +primary_key(UserID): int
+  Username: varchar(255)
+  Password: varchar(255)
+  Email: varchar(255)
+}
+
+table(ContentItem) {
+  +primary_key(ContentID): int
+  Title: varchar(255)
+  Body: text
+  PublishDate: date
+  +foreign_key(UserID): int
+  +foreign_key(CategoryID): int
+}
+
+table(Category) {
+  +primary_key(CategoryID): int
+  CategoryName: varchar(255)
+}
+
+table(Tag) {
+  +primary_key(TagID): int
+  TagName: varchar(255)
+}
+
+table(Media) {
+  +primary_key(MediaID): int
+  MediaType: varchar(50)
+  URL: varchar(255)
+  +foreign_key(ContentID): int
+}
+
+table(Comment) {
+  +primary_key(CommentID): int
+  CommentText: text
+  CommentDate: date
+  +foreign_key(UserID): int
+  +foreign_key(ContentID): int
+}
+
+User -- ContentItem : creates
+User -- Comment : writes
+ContentItem -- Category : categorized as
+ContentItem -- Media : has
+ContentItem -- Comment : has
+ContentItem -- Tag : tagged as
+
+@enduml
