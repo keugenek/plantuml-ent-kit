@@ -109,7 +109,7 @@ A CRM system is central to managing customer interactions, sales processes, and 
 
 ## 1. Customer Management
 
-![CRM Use Cases](images/crm-se-cases.png)
+![CRM Use Cases](images/crm-use-cases.png)
 
 ```plantuml
 @startuml
