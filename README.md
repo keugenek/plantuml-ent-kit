@@ -24,13 +24,13 @@ Typical features of Entity Modeling tools include:
 Reference Architectures is well-known designs widely used in various companies that proved
 themselves as a standard way of doing something.
 
-[Catalogue](/catalogue/) contains a set of Reference Architectures described in PlantUML.
+[Catalogue](catalogue/) contains a set of Reference Architectures described in PlantUML.
 
 See following examples of Reference Entity Models:
-* [Customer Relationship Management (CRM) System Reference Model](/catalogue/reference-models/crm.md)
-* [E-Commerce System Model](/catalogue/reference-models/ecomm.md)
-* [Learning Management System (LMS) Model](/catalogue/reference-models/lms.md)
-* [Content Management System (CMS) Model](/catalogue/reference-models/cms.md)
+* [Customer Relationship Management (CRM) System Reference Model](catalogue/reference-architectures/crm.md)
+* [E-Commerce System Model](catalogue/reference-architectures/ecomm.md)
+* [Learning Management System (LMS) Model](catalogue/reference-architectures/lms.md)
+* [Content Management System (CMS) Model](catalogue/reference-architectures/cms.md)
 
 ## Designing an Entity Model using PlantUML
 
