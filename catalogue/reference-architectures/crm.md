@@ -107,9 +107,9 @@ This simplified CRM model serves as a basis for understanding the relationships 
 
 A CRM system is central to managing customer interactions, sales processes, and support services. Here are some valid use-cases to provide a complete picture of a CRM system's operations:
 
-## 1. Customer Management
-
 ![CRM Use Cases](images/crm-use-cases.png)
+
+## 1. Customer Management
 
 ```plantuml
 @startuml
