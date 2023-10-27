@@ -66,6 +66,7 @@ Billing -- Insurance : covered by
 
 @enduml
 ```
+![Healthcare Management System](images/hms.png)
 
 ## Entity Descriptions
 - Patient: Represents an individual patient with personal details.
