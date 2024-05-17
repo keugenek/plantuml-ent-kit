@@ -1,0 +1,36 @@
+@startuml
+
+!define component(x) component x << (C,#FFAAAA) >>
+
+component(QueryEncoder) {
+  Encodes user query
+  into query embedding
+}
+
+component(DocumentEncoder) {
+  Encodes documents
+  into document embeddings
+}
+
+database KnowledgeBase {
+  Stores document embeddings
+  and associated metadata
+}
+
+component(Retriever) {
+  Retrieves relevant documents
+  based on query embedding
+}
+
+component(Generator) {
+  Generates response
+  based on query and retrieved documents
+}
+
+QueryEncoder -> Retriever : Query embedding
+DocumentEncoder -> KnowledgeBase : Document embeddings
+KnowledgeBase -> Retriever : Relevant document embeddings
+Retriever -> Generator : Retrieved documents
+Generator -> User : Generated response
+
+@enduml
