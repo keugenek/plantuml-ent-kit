@@ -18,12 +18,19 @@ jobs:
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
+
+      # Set up Java
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
 
     # PlantUML Generator
       - uses: grassedge/generate-plantuml-action@v1.5
@@ -32,4 +39,14 @@ jobs:
           message: "Render PlantUML files"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      
+
+      # Create output directory for PNG files
+      - name: Create output directory
+        run: mkdir -p output
+
+      # Upload PNG artifacts
+      - name: Upload PNG artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: plantuml-pngs
+          path: output
