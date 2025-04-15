@@ -32,4 +32,14 @@ jobs:
           message: "Render PlantUML files"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      
+
+      # Create output directory for PNG files
+      - name: Create output directory
+        run: mkdir -p output
+
+      # Upload PNG artifacts
+      - name: Upload PNG artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: plantuml-pngs
+          path: output
