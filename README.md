@@ -5,6 +5,16 @@ models within Visual Studio Code (VS Code).
 This repository serves as a starting point for analysts, developers, and data architects
 to dive into entity modeling using an intuitive graphical notation provided by PlantUML.
 
+## Agentic Workflow
+
+This repository is designed for **agentic development** - AI agents can easily add new patterns and diagrams:
+
+1. **Auto-Rendering**: GitHub Actions automatically renders all PlantUML files (`.puml`, `.pu`, `.plantuml`) to PNG
+2. **Auto-Commit**: Rendered images are automatically committed back to the repository
+3. **Any Branch**: Works on all branches, not just main - perfect for agent workflows
+
+**For AI Agents**: See [AGENTS.md](AGENTS.md) for detailed instructions on adding new patterns.
+
 ## What is Entity Modeling?
 
 Entity Modeling is a form of conceptual data modeling that visually represents the structure
@@ -31,6 +41,10 @@ See following examples of Reference Entity Models:
 * [E-Commerce System Model](catalogue/reference-architectures/ecomm.md)
 * [Learning Management System (LMS) Model](catalogue/reference-architectures/lms.md)
 * [Content Management System (CMS) Model](catalogue/reference-architectures/cms.md)
+
+See following examples of AI/LLM Architecture Patterns:
+* [Agentic RAG (Retrieval Augmented Generation)](catalogue/reference-architectures/agentic-rag.md)
+* [LLM Tool Call Pattern](catalogue/reference-architectures/llm-tool-call.md)
 
 ## Designing an Entity Model using PlantUML
 

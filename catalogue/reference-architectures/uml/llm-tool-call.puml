@@ -1,0 +1,89 @@
+@startuml
+
+title LLM Tool Call Pattern
+
+skinparam participant {
+    BackgroundColor #E3F2FD
+    BorderColor #1565C0
+}
+
+skinparam note {
+    BackgroundColor #FFF9C4
+    BorderColor #F9A825
+}
+
+actor User
+participant "Application" as App
+participant "LLM API" as LLM
+participant "Tool Router" as Router
+collections "Tools" as Tools
+database "External APIs\n& Data Sources" as External
+
+== User Request ==
+User -> App : Send message
+activate App
+
+App -> LLM : API Request with\n- User message\n- Tool definitions\n- System prompt
+activate LLM
+
+note right of LLM
+  LLM analyzes request
+  and determines if
+  tools are needed
+end note
+
+== Tool Call Decision ==
+LLM --> App : Response with\ntool_calls array
+deactivate LLM
+
+note over App
+  Response contains:
+  - tool name
+  - arguments (JSON)
+  - call ID
+end note
+
+== Tool Execution ==
+App -> Router : Route tool call
+activate Router
+
+Router -> Tools : Execute tool\nwith arguments
+activate Tools
+
+Tools -> External : Query/Action
+activate External
+External --> Tools : Result
+deactivate External
+
+Tools --> Router : Tool result
+deactivate Tools
+
+Router --> App : Formatted result
+deactivate Router
+
+== Response Generation ==
+App -> LLM : Continue with\ntool results
+activate LLM
+
+note right of LLM
+  LLM incorporates
+  tool results into
+  final response
+end note
+
+LLM --> App : Final response\n(natural language)
+deactivate LLM
+
+App --> User : Display response
+deactivate App
+
+== Multi-Turn Tool Calls (Optional) ==
+
+note over User, External
+  The LLM may request multiple tool calls
+  in sequence or parallel before generating
+  the final response. This pattern repeats
+  until the LLM has sufficient information.
+end note
+
+@enduml
