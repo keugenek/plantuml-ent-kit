@@ -52,16 +52,16 @@ PromptsC --> API : HTTP requests
 
 note right of Client
   MCP Client manages:
-  • Server connections
-  • Capability negotiation
-  • Request routing
+  * Server connections
+  * Capability negotiation
+  * Request routing
 end note
 
 note bottom of ServerA
   Servers expose:
-  • Tools (executable functions)
-  • Resources (data/context)
-  • Prompts (templates)
+  * Tools (executable functions)
+  * Resources (data/context)
+  * Prompts (templates)
 end note
 
 @enduml

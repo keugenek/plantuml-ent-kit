@@ -2,40 +2,40 @@
 
 title Agentic RAG Architecture
 
-!define component(x) component x << (C,#FFAAAA) >>
+skinparam component {
+    BackgroundColor #E3F2FD
+    BorderColor #1565C0
+}
 
 actor "User" as User
 
-component(QueryEncoder) {
-  Encodes user query
-  into query embedding
-}
+component "Query Encoder" as QueryEncoder
+component "Document Encoder" as DocumentEncoder
+component "Retriever" as Retriever
+component "Generator" as Generator
 
-component(DocumentEncoder) {
-  Encodes documents
-  into document embeddings
-}
-
-database KnowledgeBase {
-  Stores document embeddings
-  and associated metadata
-}
-
-component(Retriever) {
-  Retrieves relevant documents
-  based on query embedding
-}
-
-component(Generator) {
-  Generates response
-  based on query and retrieved documents
-}
+database "Knowledge Base" as KnowledgeBase
 
 User --> QueryEncoder : User query
 QueryEncoder --> Retriever : Query embedding
 DocumentEncoder --> KnowledgeBase : Document embeddings
-KnowledgeBase --> Retriever : Relevant document embeddings
+KnowledgeBase --> Retriever : Relevant embeddings
 Retriever --> Generator : Retrieved documents
 Generator --> User : Generated response
+
+note right of QueryEncoder
+  Encodes user query
+  into dense vector
+end note
+
+note right of KnowledgeBase
+  Stores document embeddings
+  and metadata
+end note
+
+note right of Generator
+  Generates response using
+  query + retrieved docs
+end note
 
 @enduml

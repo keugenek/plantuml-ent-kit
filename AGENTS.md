@@ -335,7 +335,48 @@ Before committing, ensure:
 - [ ] File starts with `@startuml` and ends with `@enduml`
 - [ ] Documentation `.md` file references the correct image path
 - [ ] Image path in docs uses: `images/<filename>.png`
-- [ ] No syntax errors in PlantUML (test locally if possible)
+- [ ] No syntax errors in PlantUML (run validation script)
+- [ ] No text inside component() macros - use notes instead
+
+## Validate Before Commit
+
+**Always run the validation script before committing:**
+
+```bash
+./scripts/validate-puml.sh
+```
+
+This checks for:
+- Missing `@startuml` / `@enduml`
+- Mixing sequence diagram elements with component diagrams
+- Text inside `component()` macros (causes rendering failures)
+- Unicode characters that may cause issues
+
+The GitHub Actions workflow also runs validation before rendering. If validation fails, the workflow will stop and show which files have errors.
+
+### 5. Text Inside Component Macros
+
+**WRONG** - Text inside component() macro breaks rendering:
+```plantuml
+@startuml
+component(MyComponent) {
+  This text inside
+  will break rendering
+}
+@enduml
+```
+
+**CORRECT** - Use notes for descriptions:
+```plantuml
+@startuml
+component "My Component" as MyComponent
+
+note right of MyComponent
+  This text renders
+  correctly as a note
+end note
+@enduml
+```
 
 ## Testing Locally (Optional)
 
