@@ -13,8 +13,9 @@ skinparam package {
 }
 
 actor "User" as User
-participant "Agent" as Agent
-participant "Skill Router" as Router
+
+component "Agent" as Agent
+component "Skill Router" as Router
 
 package "Skill Registry" as Registry {
     component "Code Skill" as CodeSkill
@@ -30,8 +31,8 @@ package "Skill Resources" as Resources {
     collections "APIs" as APIs
 }
 
-User -> Agent : Complex request
-Agent -> Router : Analyze & route
+User --> Agent : Complex request
+Agent --> Router : Analyze & route
 
 Router --> CodeSkill : Code tasks
 Router --> ResearchSkill : Information gathering
@@ -53,17 +54,17 @@ Agent --> User : Synthesized response
 
 note right of Registry
   Skills are:
-  • Self-contained
-  • Composable
-  • Reusable
-  • Specialized
+  * Self-contained
+  * Composable
+  * Reusable
+  * Specialized
 end note
 
 note bottom of Router
   Router handles:
-  • Skill selection
-  • Parallel execution
-  • Result aggregation
+  * Skill selection
+  * Parallel execution
+  * Result aggregation
 end note
 
 @enduml
