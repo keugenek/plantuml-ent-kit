@@ -1,0 +1,73 @@
+@startuml
+
+title Multi-Agent Orchestration Pattern
+
+skinparam participant {
+    BackgroundColor #FFF8E1
+    BorderColor #FF8F00
+}
+
+skinparam actor {
+    BackgroundColor #FFECB3
+}
+
+actor "User" as User
+
+box "Orchestration Layer" #F5F5F5
+    participant "Orchestrator Agent" as Orchestrator
+    participant "Task Queue" as Queue
+end box
+
+box "Specialized Agents" #E3F2FD
+    participant "Planner Agent" as Planner
+    participant "Executor Agent" as Executor
+    participant "Reviewer Agent" as Reviewer
+end box
+
+box "Shared Resources" #E8F5E9
+    database "Context Store" as Context
+    collections "Tool Registry" as Tools
+end box
+
+== Task Submission ==
+User -> Orchestrator : Submit complex task
+Orchestrator -> Context : Store task context
+
+== Planning Phase ==
+Orchestrator -> Planner : Request execution plan
+activate Planner
+Planner -> Context : Read task details
+Planner -> Planner : Break down into subtasks
+Planner --> Orchestrator : Return task plan
+deactivate Planner
+
+Orchestrator -> Queue : Enqueue subtasks
+
+== Execution Phase ==
+loop For each subtask
+    Orchestrator -> Executor : Assign subtask
+    activate Executor
+    Executor -> Tools : Execute required tools
+    Executor -> Context : Update progress
+    Executor --> Orchestrator : Return result
+    deactivate Executor
+end
+
+== Review Phase ==
+Orchestrator -> Reviewer : Request quality review
+activate Reviewer
+Reviewer -> Context : Read all results
+Reviewer -> Reviewer : Validate & assess
+alt Issues Found
+    Reviewer --> Orchestrator : Request revision
+    Orchestrator -> Executor : Re-execute with feedback
+else Approved
+    Reviewer --> Orchestrator : Approve results
+end
+deactivate Reviewer
+
+== Completion ==
+Orchestrator -> Context : Compile final output
+Orchestrator --> User : Deliver results
+
+@enduml

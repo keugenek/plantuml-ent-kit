@@ -1,0 +1,75 @@
+@startuml
+
+title Tool Chaining Pattern - Sequential Tool Execution
+
+skinparam activity {
+    BackgroundColor #E1F5FE
+    BorderColor #0277BD
+}
+
+skinparam partition {
+    BackgroundColor #FAFAFA
+}
+
+start
+
+:User Request;
+note right: "Analyze sales data and create report"
+
+partition "Chain Planning" {
+    :LLM analyzes request;
+    :Identify required tools;
+    :Determine execution order;
+    :Plan data flow between tools;
+}
+
+partition "Tool Chain Execution" {
+
+    :Tool 1: fetch_data|
+    note right
+        Input: query parameters
+        Output: raw_data
+    end note
+
+    :Tool 2: transform_data|
+    note right
+        Input: raw_data (from Tool 1)
+        Output: cleaned_data
+    end note
+
+    :Tool 3: analyze_data|
+    note right
+        Input: cleaned_data (from Tool 2)
+        Output: analysis_results
+    end note
+
+    :Tool 4: generate_chart|
+    note right
+        Input: analysis_results (from Tool 3)
+        Output: visualization
+    end note
+
+    :Tool 5: create_report|
+    note right
+        Input: analysis_results + visualization
+        Output: final_report
+    end note
+}
+
+partition "Result Synthesis" {
+    :LLM receives all outputs;
+    :Synthesize natural language response;
+    :Include artifacts (charts, reports);
+}
+
+:Return to User;
+
+stop
+
+legend right
+    |= Symbol |= Meaning |
+    | Rectangle | LLM Processing |
+    | Rounded | Tool Execution |
+endlegend
+
+@enduml

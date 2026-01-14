@@ -43,8 +43,12 @@ See following examples of Reference Entity Models:
 * [Content Management System (CMS) Model](catalogue/reference-architectures/cms.md)
 
 See following examples of AI/LLM Architecture Patterns:
-* [Agentic RAG (Retrieval Augmented Generation)](catalogue/reference-architectures/agentic-rag.md)
 * [LLM Tool Call Pattern](catalogue/reference-architectures/llm-tool-call.md)
+* [Model Context Protocol (MCP)](catalogue/reference-architectures/mcp-architecture.md)
+* [Skills Pattern](catalogue/reference-architectures/skills-pattern.md)
+* [Agent Orchestration](catalogue/reference-architectures/agent-orchestration.md)
+* [Tool Chaining](catalogue/reference-architectures/tool-chaining.md)
+* [Agentic RAG](catalogue/reference-architectures/agentic-rag.md)
 
 ## Designing an Entity Model using PlantUML
 

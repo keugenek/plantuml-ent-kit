@@ -1,0 +1,67 @@
+@startuml
+
+title Model Context Protocol (MCP) Architecture
+
+skinparam component {
+    BackgroundColor #E3F2FD
+    BorderColor #1565C0
+}
+
+skinparam database {
+    BackgroundColor #FFF3E0
+    BorderColor #EF6C00
+}
+
+skinparam rectangle {
+    BackgroundColor #F3E5F5
+    BorderColor #7B1FA2
+}
+
+actor "User" as User
+
+rectangle "MCP Host" as Host {
+    component "AI Application\n(Claude Desktop, IDE, etc.)" as App
+    component "MCP Client" as Client
+}
+
+rectangle "MCP Server A" as ServerA {
+    component "Tool Handler" as ToolsA
+    database "Local Files" as Files
+}
+
+rectangle "MCP Server B" as ServerB {
+    component "Resource Handler" as ResourcesB
+    database "Database" as DB
+}
+
+rectangle "MCP Server C" as ServerC {
+    component "Prompt Handler" as PromptsC
+    cloud "External API" as API
+}
+
+User -> App : Natural language request
+App <-> Client : Internal communication
+
+Client <--> ToolsA : JSON-RPC 2.0\n(tools/list, tools/call)
+Client <--> ResourcesB : JSON-RPC 2.0\n(resources/list, resources/read)
+Client <--> PromptsC : JSON-RPC 2.0\n(prompts/list, prompts/get)
+
+ToolsA --> Files : Read/Write
+ResourcesB --> DB : Query
+PromptsC --> API : HTTP requests
+
+note right of Client
+  MCP Client manages:
+  • Server connections
+  • Capability negotiation
+  • Request routing
+end note
+
+note bottom of ServerA
+  Servers expose:
+  • Tools (executable functions)
+  • Resources (data/context)
+  • Prompts (templates)
+end note
+
+@enduml
