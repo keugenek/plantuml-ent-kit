@@ -44,6 +44,7 @@ See following examples of Reference Entity Models:
 
 See following examples of AI/LLM Architecture Patterns:
 * [LLM Tool Call Pattern](catalogue/reference-architectures/llm-tool-call.md)
+* [LLM Context Management](catalogue/reference-architectures/llm-context-management.md) - Subagents, RAG, compaction, sliding windows
 * [Model Context Protocol (MCP)](catalogue/reference-architectures/mcp-architecture.md)
 * [Skills Pattern](catalogue/reference-architectures/skills-pattern.md)
 * [Agent Orchestration](catalogue/reference-architectures/agent-orchestration.md)
