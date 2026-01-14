@@ -21,12 +21,13 @@ actor "Input Tokens" as Input
 
 rectangle "Tokenizer Compression" as Tokenizer {
     component "Canonical\nMapping" as Canon
-    note right of Canon
-      Compresses equivalent tokens
-      (Apple/apple/APPLE → apple)
-      23% vocabulary reduction
-    end note
 }
+
+note right of Canon
+  Compresses equivalent tokens
+  (Apple, apple, APPLE -> apple)
+  23% vocabulary reduction
+end note
 
 rectangle "Engram Module" as Engram #E8F5E9 {
     component "N-gram\nExtractor" as NGram
@@ -37,13 +38,15 @@ rectangle "Engram Module" as Engram #E8F5E9 {
         component "Hash Head K" as HK
     }
 
-    database "Embedding\nLookup Table" as EmbedTable {
-        System RAM / Host Memory
-        O(1) Retrieval
-    }
+    database "Embedding\nLookup Table" as EmbedTable
 
     component "Concatenate\nEmbeddings" as Concat
 }
+
+note right of EmbedTable
+  System RAM storage
+  O(1) Retrieval
+end note
 
 rectangle "Neural Backbone (MoE)" as Backbone #FFEBEE {
     component "Attention\nLayers" as Attention
@@ -53,11 +56,12 @@ rectangle "Neural Backbone (MoE)" as Backbone #FFEBEE {
 
 rectangle "Gating Mechanism" as Gate #FFF9C4 {
     component "Context-Aware\nGate" as ContextGate
-    note bottom of ContextGate
-      Suppresses memory if
-      it contradicts context
-    end note
 }
+
+note bottom of ContextGate
+  Suppresses memory if
+  it contradicts context
+end note
 
 component "Fused Output" as Output
 
@@ -69,7 +73,7 @@ NGram --> H1 : n-grams
 NGram --> H2
 NGram --> HK
 
-H1 --> EmbedTable : hash(ngram)
+H1 --> EmbedTable : hash
 H2 --> EmbedTable
 HK --> EmbedTable
 
@@ -82,14 +86,13 @@ MoE --> Hidden
 Hidden --> ContextGate : Context signal
 Concat --> ContextGate : Memory vector
 
-ContextGate --> Output : Gated memory + hidden states
+ContextGate --> Output : Gated output
 
 legend right
   |= Component |= Purpose |
   | Engram Module | O(1) static knowledge lookup |
-  | Neural Backbone | Dynamic reasoning (75-80%) |
+  | Neural Backbone | Dynamic reasoning 75-80% |
   | Gating | Context-aware memory fusion |
-  | Optimal split: 75-80% compute, 20-25% memory |
 endlegend
 
 @enduml
