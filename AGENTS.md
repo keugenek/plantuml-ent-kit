@@ -244,6 +244,89 @@ The GitHub Actions workflow renders files with these extensions:
 | Agentic RAG | Component | AI retrieval-augmented generation |
 | LLM Tool Call | Sequence | LLM tool/function calling |
 
+## Common Errors to Avoid
+
+These are real mistakes that have broken diagram rendering:
+
+### 1. Mixing Diagram Types
+
+**WRONG** - Don't mix `participant` (sequence diagram) with `component`:
+```plantuml
+@startuml
+participant "Agent" as Agent        ' WRONG: sequence diagram element
+component "Router" as Router        ' WRONG: mixed with component
+Agent -> Router
+@enduml
+```
+
+**CORRECT** - Use consistent element types:
+```plantuml
+@startuml
+' For component diagrams, use component for everything
+component "Agent" as Agent
+component "Router" as Router
+Agent --> Router
+@enduml
+```
+
+```plantuml
+@startuml
+' For sequence diagrams, use participant for everything
+participant "Agent" as Agent
+participant "Router" as Router
+Agent -> Router
+@enduml
+```
+
+### 2. Referencing Undefined Elements
+
+**WRONG** - Using an element without defining it:
+```plantuml
+@startuml
+component(Generator) {
+  Generates response
+}
+Generator -> User : response   ' WRONG: User is never defined!
+@enduml
+```
+
+**CORRECT** - Define all elements before using them:
+```plantuml
+@startuml
+actor "User" as User              ' Define User first
+component(Generator) {
+  Generates response
+}
+Generator -> User : response      ' Now User exists
+@enduml
+```
+
+### 3. Using Special Characters in Notes
+
+**WRONG** - Bullet points with `•` can cause issues:
+```plantuml
+note right of Component
+  • Item one
+  • Item two
+end note
+```
+
+**CORRECT** - Use asterisks for bullet points:
+```plantuml
+note right of Component
+  * Item one
+  * Item two
+end note
+```
+
+### 4. Arrow Syntax Inconsistency
+
+| Arrow | Meaning | Use in |
+|-------|---------|--------|
+| `->` | Solid line, solid head | Sequence diagrams |
+| `-->` | Dotted line | Component/deployment diagrams |
+| `--` | Simple line | Entity relationships |
+
 ## Validation Checklist
 
 Before committing, ensure:
