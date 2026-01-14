@@ -2,97 +2,74 @@
 
 title DeepSeek Engram: Conditional Memory via N-gram Lookup
 
-skinparam component {
-    BackgroundColor #E3F2FD
-    BorderColor #1565C0
-}
-
-skinparam database {
-    BackgroundColor #FFF3E0
-    BorderColor #EF6C00
-}
-
-skinparam rectangle {
-    BackgroundColor #F3E5F5
-    BorderColor #7B1FA2
-}
+skinparam backgroundColor #FEFEFE
 
 actor "Input Tokens" as Input
 
-rectangle "Tokenizer Compression" as Tokenizer {
-    component "Canonical\nMapping" as Canon
+package "Tokenizer Compression" as Tokenizer #F3E5F5 {
+    component "Canonical Mapping" as Canon
 }
 
-note right of Canon
-  Compresses equivalent tokens
-  (Apple, apple, APPLE -> apple)
-  23% vocabulary reduction
-end note
-
-rectangle "Engram Module" as Engram #E8F5E9 {
-    component "N-gram\nExtractor" as NGram
-
-    rectangle "Multi-Head Hashing" as Hashing {
-        component "Hash Head 1" as H1
-        component "Hash Head 2" as H2
-        component "Hash Head K" as HK
-    }
-
-    database "Embedding\nLookup Table" as EmbedTable
-
-    component "Concatenate\nEmbeddings" as Concat
+package "Engram Module" as Engram #E8F5E9 {
+    component "N-gram Extractor" as NGram
+    component "Hash Head 1" as H1
+    component "Hash Head 2" as H2
+    component "Hash Head K" as HK
+    database "Embedding Table" as EmbedTable
+    component "Concatenate" as Concat
 }
 
-note right of EmbedTable
-  System RAM storage
-  O(1) Retrieval
-end note
-
-rectangle "Neural Backbone (MoE)" as Backbone #FFEBEE {
-    component "Attention\nLayers" as Attention
-    component "Mixture of\nExperts" as MoE
-    component "Hidden\nStates" as Hidden
+package "Neural Backbone" as Backbone #FFEBEE {
+    component "Attention" as Attention
+    component "MoE Layer" as MoE
+    component "Hidden States" as Hidden
 }
 
-rectangle "Gating Mechanism" as Gate #FFF9C4 {
-    component "Context-Aware\nGate" as ContextGate
+package "Gating" as Gate #FFF9C4 {
+    component "Context Gate" as ContextGate
 }
-
-note bottom of ContextGate
-  Suppresses memory if
-  it contradicts context
-end note
 
 component "Fused Output" as Output
 
-' Flow
-Input --> Tokenizer
-Tokenizer --> NGram : Compressed tokens
+' Tokenizer flow
+Input --> Canon
+Canon --> NGram : compressed
 
-NGram --> H1 : n-grams
+' Hash flow
+NGram --> H1
 NGram --> H2
 NGram --> HK
-
-H1 --> EmbedTable : hash
+H1 --> EmbedTable
 H2 --> EmbedTable
 HK --> EmbedTable
+EmbedTable --> Concat
 
-EmbedTable --> Concat : Retrieved embeddings
-
-Input --> Attention : Original tokens
+' Neural flow
+Input --> Attention
 Attention --> MoE
 MoE --> Hidden
 
-Hidden --> ContextGate : Context signal
-Concat --> ContextGate : Memory vector
+' Fusion
+Hidden --> ContextGate
+Concat --> ContextGate
+ContextGate --> Output
 
-ContextGate --> Output : Gated output
+note right of EmbedTable
+  O(1) lookup
+  System RAM
+end note
 
-legend right
-  |= Component |= Purpose |
-  | Engram Module | O(1) static knowledge lookup |
-  | Neural Backbone | Dynamic reasoning 75-80% |
-  | Gating | Context-aware memory fusion |
-endlegend
+note right of ContextGate
+  Filters memory
+  by context
+end note
+
+note bottom of Engram
+  20-25% of parameters
+end note
+
+note bottom of Backbone
+  75-80% of parameters
+end note
 
 @enduml
