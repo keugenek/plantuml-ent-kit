@@ -1,6 +1,10 @@
 @startuml
 
+title Agentic RAG Architecture
+
 !define component(x) component x << (C,#FFAAAA) >>
+
+actor "User" as User
 
 component(QueryEncoder) {
   Encodes user query
@@ -27,10 +31,11 @@ component(Generator) {
   based on query and retrieved documents
 }
 
-QueryEncoder -> Retriever : Query embedding
-DocumentEncoder -> KnowledgeBase : Document embeddings
-KnowledgeBase -> Retriever : Relevant document embeddings
-Retriever -> Generator : Retrieved documents
-Generator -> User : Generated response
+User --> QueryEncoder : User query
+QueryEncoder --> Retriever : Query embedding
+DocumentEncoder --> KnowledgeBase : Document embeddings
+KnowledgeBase --> Retriever : Relevant document embeddings
+Retriever --> Generator : Retrieved documents
+Generator --> User : Generated response
 
 @enduml
