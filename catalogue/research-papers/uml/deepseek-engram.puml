@@ -1,0 +1,95 @@
+@startuml
+
+title DeepSeek Engram: Conditional Memory via N-gram Lookup
+
+skinparam component {
+    BackgroundColor #E3F2FD
+    BorderColor #1565C0
+}
+
+skinparam database {
+    BackgroundColor #FFF3E0
+    BorderColor #EF6C00
+}
+
+skinparam rectangle {
+    BackgroundColor #F3E5F5
+    BorderColor #7B1FA2
+}
+
+actor "Input Tokens" as Input
+
+rectangle "Tokenizer Compression" as Tokenizer {
+    component "Canonical\nMapping" as Canon
+    note right of Canon
+      Compresses equivalent tokens
+      (Apple/apple/APPLE → apple)
+      23% vocabulary reduction
+    end note
+}
+
+rectangle "Engram Module" as Engram #E8F5E9 {
+    component "N-gram\nExtractor" as NGram
+
+    rectangle "Multi-Head Hashing" as Hashing {
+        component "Hash Head 1" as H1
+        component "Hash Head 2" as H2
+        component "Hash Head K" as HK
+    }
+
+    database "Embedding\nLookup Table" as EmbedTable {
+        System RAM / Host Memory
+        O(1) Retrieval
+    }
+
+    component "Concatenate\nEmbeddings" as Concat
+}
+
+rectangle "Neural Backbone (MoE)" as Backbone #FFEBEE {
+    component "Attention\nLayers" as Attention
+    component "Mixture of\nExperts" as MoE
+    component "Hidden\nStates" as Hidden
+}
+
+rectangle "Gating Mechanism" as Gate #FFF9C4 {
+    component "Context-Aware\nGate" as ContextGate
+    note bottom of ContextGate
+      Suppresses memory if
+      it contradicts context
+    end note
+}
+
+component "Fused Output" as Output
+
+' Flow
+Input --> Tokenizer
+Tokenizer --> NGram : Compressed tokens
+
+NGram --> H1 : n-grams
+NGram --> H2
+NGram --> HK
+
+H1 --> EmbedTable : hash(ngram)
+H2 --> EmbedTable
+HK --> EmbedTable
+
+EmbedTable --> Concat : Retrieved embeddings
+
+Input --> Attention : Original tokens
+Attention --> MoE
+MoE --> Hidden
+
+Hidden --> ContextGate : Context signal
+Concat --> ContextGate : Memory vector
+
+ContextGate --> Output : Gated memory + hidden states
+
+legend right
+  |= Component |= Purpose |
+  | Engram Module | O(1) static knowledge lookup |
+  | Neural Backbone | Dynamic reasoning (75-80%) |
+  | Gating | Context-aware memory fusion |
+  | Optimal split: 75-80% compute, 20-25% memory |
+endlegend
+
+@enduml
