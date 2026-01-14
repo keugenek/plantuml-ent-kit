@@ -1,5 +1,5 @@
 # PlantUML Auto-Render Workflow
-# This workflow automatically renders PlantUML diagrams and commits them back to the repo
+# This workflow automatically validates and renders PlantUML diagrams
 # Designed for agentic workflows - works on all branches
 
 name: Render PlantUML Diagrams
@@ -24,7 +24,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  render:
+  validate-and-render:
     runs-on: ubuntu-latest
 
     steps:
@@ -33,6 +33,53 @@ jobs:
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Validate PlantUML files
+        run: |
+          echo "🔍 Validating PlantUML files..."
+          ERRORS=0
+
+          for file in $(find . -type f \( -name "*.puml" -o -name "*.pu" -o -name "*.plantuml" \) | grep -v node_modules); do
+            echo "  Checking $file..."
+
+            # Check for @startuml
+            if ! grep -q "@startuml" "$file"; then
+              echo "    ❌ Missing @startuml"
+              ERRORS=$((ERRORS + 1))
+              continue
+            fi
+
+            # Check for @enduml
+            if ! grep -q "@enduml" "$file"; then
+              echo "    ❌ Missing @enduml"
+              ERRORS=$((ERRORS + 1))
+              continue
+            fi
+
+            # Check for mixing participant with component
+            if grep -q "participant" "$file" && grep -qE "^component|^  component" "$file"; then
+              echo "    ❌ Mixing participant (sequence) with component elements"
+              ERRORS=$((ERRORS + 1))
+              continue
+            fi
+
+            # Check for text inside component() macro
+            if grep -qE "component\([^)]+\)\s*\{" "$file"; then
+              echo "    ❌ Text inside component() macro - use notes instead"
+              ERRORS=$((ERRORS + 1))
+              continue
+            fi
+
+            echo "    ✅ Valid"
+          done
+
+          if [ $ERRORS -gt 0 ]; then
+            echo ""
+            echo "❌ Validation failed with $ERRORS error(s)"
+            exit 1
+          fi
+
+          echo "✅ All PlantUML files validated successfully!"
 
       - name: Setup Java
         uses: actions/setup-java@v4
@@ -45,21 +92,17 @@ jobs:
           mkdir -p /tmp/plantuml
           curl -L -o /tmp/plantuml/plantuml.jar https://github.com/plantuml/plantuml/releases/download/v1.2024.8/plantuml-1.2024.8.jar
 
-      - name: Find and Render PlantUML files
+      - name: Render PlantUML files
         run: |
-          # Find all PlantUML files and render them
           find . -type f \( -name "*.puml" -o -name "*.pu" -o -name "*.plantuml" \) | while read file; do
             dir=$(dirname "$file")
             filename=$(basename "$file")
             name="${filename%.*}"
 
             # Determine output directory (sibling 'images' folder)
-            parent_dir=$(dirname "$dir")
             if [[ "$dir" == *"/uml"* ]]; then
-              # If in a /uml folder, output to sibling /images folder
               output_dir="${dir/\/uml/\/images}"
             else
-              # Otherwise, create images folder next to the file
               output_dir="$dir/images"
             fi
 
@@ -75,11 +118,9 @@ jobs:
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
 
-          # Add all PNG files in images directories
           git add -A "**/*.png" 2>/dev/null || true
           git add -A "**/images/*.png" 2>/dev/null || true
 
-          # Check if there are changes to commit
           if git diff --staged --quiet; then
             echo "No changes to commit"
           else
