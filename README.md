@@ -50,6 +50,12 @@ See following examples of AI/LLM Architecture Patterns:
 * [Tool Chaining](catalogue/reference-architectures/tool-chaining.md)
 * [Agentic RAG](catalogue/reference-architectures/agentic-rag.md)
 
+## Research Papers
+
+Diagrams explaining key AI/ML research papers:
+
+* [DeepSeek Engram: Conditional Memory via N-gram Lookup](catalogue/research-papers/deepseek-engram.md) - O(1) knowledge retrieval using hashed n-gram embeddings
+
 ## Designing an Entity Model using PlantUML
 
 PlantUML provides a simple and intuitive textual notation for creating diagrams, including entity models. Here’s a basic example of an entity model representing a simple bookstore:
