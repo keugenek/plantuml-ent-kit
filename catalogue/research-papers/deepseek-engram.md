@@ -6,7 +6,7 @@
 
 ## Overview
 
-![DeepSeek Engram Architecture](https://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/keugenek/plantuml-ent-kit/main/catalogue/research-papers/uml/deepseek-engram.puml)
+![DeepSeek Engram Architecture](images/deepseek-engram.png)
 
 ## Problem Statement
 

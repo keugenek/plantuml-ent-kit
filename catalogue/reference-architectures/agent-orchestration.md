@@ -4,7 +4,7 @@ The Agent Orchestration pattern coordinates multiple specialized agents to colla
 
 ## Overview
 
-![Agent Orchestration](https://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/keugenek/plantuml-ent-kit/main/catalogue/reference-architectures/uml/agent-orchestration.puml)
+![Agent Orchestration](images/agent-orchestration.png)
 
 ## Pattern Description
 

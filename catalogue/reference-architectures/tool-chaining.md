@@ -4,7 +4,7 @@ The Tool Chaining pattern enables LLMs to execute multiple tools in sequence, wh
 
 ## Overview
 
-![Tool Chaining](https://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/keugenek/plantuml-ent-kit/main/catalogue/reference-architectures/uml/tool-chaining.puml)
+![Tool Chaining](images/tool-chaining.png)
 
 ## Pattern Description
 

@@ -45,7 +45,7 @@ Generator -> User : Generated response
 @enduml
 ```
 
-![Agentic RAG Architecture](https://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/keugenek/plantuml-ent-kit/main/catalogue/reference-architectures/uml/agentic-rag.pu)
+![Agentic RAG Architecture](images/agentic-rag.png)
 
 ## Component Descriptions
 

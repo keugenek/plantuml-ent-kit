@@ -4,7 +4,7 @@ The Tool Call pattern (also known as Function Calling) enables Large Language Mo
 
 ## Overview
 
-![LLM Tool Call Pattern](https://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/keugenek/plantuml-ent-kit/main/catalogue/reference-architectures/uml/llm-tool-call.puml)
+![LLM Tool Call Pattern](images/llm-tool-call.png)
 
 ## Pattern Description
 

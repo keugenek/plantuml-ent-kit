@@ -4,7 +4,7 @@ The Skills Pattern organizes agent capabilities into self-contained, reusable mo
 
 ## Overview
 
-![Skills Pattern](https://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/keugenek/plantuml-ent-kit/main/catalogue/reference-architectures/uml/skills-pattern.puml)
+![Skills Pattern](images/skills-pattern.png)
 
 ## Pattern Description
 
