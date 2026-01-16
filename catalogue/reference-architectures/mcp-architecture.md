@@ -4,7 +4,7 @@ The Model Context Protocol (MCP) is an open standard that enables AI application
 
 ## Overview
 
-![MCP Architecture](https://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/keugenek/plantuml-ent-kit/main/catalogue/reference-architectures/uml/mcp-architecture.puml)
+![MCP Architecture](images/mcp-architecture.png)
 
 ## Pattern Description
 

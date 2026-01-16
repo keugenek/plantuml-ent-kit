@@ -4,7 +4,7 @@ A comprehensive index of techniques to prevent context pollution and optimize LL
 
 ## Overview
 
-![LLM Context Management](https://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/keugenek/plantuml-ent-kit/main/catalogue/reference-architectures/uml/llm-context-management.puml)
+![LLM Context Management](images/llm-context-management.png)
 
 ## The Problem: Context Degradation
 

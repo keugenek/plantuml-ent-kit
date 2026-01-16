@@ -20,22 +20,25 @@ Create a matching `.md` file in `catalogue/reference-architectures/`:
 catalogue/reference-architectures/<pattern-name>.md
 ```
 
-### Step 3: Use PlantUML Proxy for Images
+### Step 3: Reference the Image in Documentation
 
-In your documentation, use the PlantUML proxy URL to render diagrams instantly:
+In your documentation, reference the PNG that GitHub Actions will generate:
 
 ```markdown
-![Diagram Name](https://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/keugenek/plantuml-ent-kit/main/catalogue/reference-architectures/uml/<pattern-name>.puml)
+![Diagram Name](images/<pattern-name>.png)
 ```
 
-This renders the diagram on-the-fly from the source file - no need to wait for GitHub Actions!
+The image path is relative to your `.md` file location.
 
 ### Step 4: Commit and Push
 
-GitHub Actions will also:
-1. Detect the new `.puml` file
+GitHub Actions will automatically:
+1. Validate your `.puml` file for syntax errors
 2. Render it to PNG in `catalogue/reference-architectures/images/`
-3. Commit the rendered image back to the repo (as backup)
+3. Commit the rendered image back to the repo
+4. Deploy to GitHub Pages
+
+**Site URL**: https://keugenek.github.io/plantuml-ent-kit/
 
 ## Directory Structure
 
@@ -183,7 +186,7 @@ Brief description of what this pattern represents and when to use it.
 
 ## Overview
 
-![Pattern Diagram](https://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/keugenek/plantuml-ent-kit/main/catalogue/reference-architectures/uml/<pattern-name>.puml)
+![Pattern Diagram](images/<pattern-name>.png)
 
 ## Components
 
