@@ -1,6 +1,6 @@
 # PlantUML Auto-Render Workflow
-# Validates, renders PlantUML diagrams and commits PNG images back to repo
-# Designed for agentic workflows - works on all branches
+# Validates, renders PlantUML diagrams to PNG + SVG and commits back to repo
+# Images are cached by jsDelivr CDN for fast global delivery
 
 name: Render PlantUML Diagrams
 
@@ -79,12 +79,20 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
+      - name: Cache PlantUML JAR
+        uses: actions/cache@v4
+        with:
+          path: /tmp/plantuml
+          key: plantuml-1.2024.8
+
       - name: Download PlantUML
         run: |
-          mkdir -p /tmp/plantuml
-          curl -L -o /tmp/plantuml/plantuml.jar https://github.com/plantuml/plantuml/releases/download/v1.2024.8/plantuml-1.2024.8.jar
+          if [ ! -f /tmp/plantuml/plantuml.jar ]; then
+            mkdir -p /tmp/plantuml
+            curl -L -o /tmp/plantuml/plantuml.jar https://github.com/plantuml/plantuml/releases/download/v1.2024.8/plantuml-1.2024.8.jar
+          fi
 
-      - name: Render PlantUML files
+      - name: Render PlantUML files (PNG + SVG)
         run: |
           echo "🎨 Rendering PlantUML diagrams..."
 
@@ -101,17 +109,23 @@ jobs:
             fi
 
             mkdir -p "$output_dir"
+            output_path=$(realpath "$output_dir")
 
             echo "  Rendering: $file"
-            echo "  Output: $output_dir/$name.png"
+            echo "  Output: $output_dir/$name.{png,svg}"
 
-            # Render to PNG
-            java -jar /tmp/plantuml/plantuml.jar -tpng -o "$(realpath "$output_dir")" "$file"
+            # Render to PNG (for compatibility)
+            java -jar /tmp/plantuml/plantuml.jar -tpng -o "$output_path" "$file"
 
-            if [ -f "$output_dir/$name.png" ]; then
-              echo "    ✅ Success"
+            # Render to SVG (for quality + smaller size)
+            java -jar /tmp/plantuml/plantuml.jar -tsvg -o "$output_path" "$file"
+
+            if [ -f "$output_dir/$name.png" ] && [ -f "$output_dir/$name.svg" ]; then
+              echo "    ✅ PNG + SVG created"
+            elif [ -f "$output_dir/$name.png" ]; then
+              echo "    ⚠️ Only PNG created"
             else
-              echo "    ⚠️ Warning: PNG not created"
+              echo "    ❌ Render failed"
             fi
           done
 
@@ -120,26 +134,57 @@ jobs:
       - name: List rendered images
         run: |
           echo "📁 Rendered images:"
+          echo ""
+          echo "PNG files:"
           find . -name "*.png" -path "*/images/*" | head -20
+          echo ""
+          echo "SVG files:"
+          find . -name "*.svg" -path "*/images/*" | head -20
+
+      - name: Update patterns.json timestamps
+        run: |
+          if [ -f patterns.json ]; then
+            # Update the 'updated' field with today's date
+            sed -i "s/\"updated\": \"[0-9-]*\"/\"updated\": \"$(date +%Y-%m-%d)\"/" patterns.json
+          fi
 
       - name: Commit rendered diagrams
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
 
-          # Add all PNG files
+          # Add all image files
           git add -A "**/images/*.png" 2>/dev/null || true
+          git add -A "**/images/*.svg" 2>/dev/null || true
           git add -A "**/*.png" 2>/dev/null || true
+          git add -A "**/*.svg" 2>/dev/null || true
+          git add patterns.json 2>/dev/null || true
 
           # Check if there are changes to commit
           if git diff --staged --quiet; then
             echo "No new images to commit"
           else
-            git commit -m "🤖 Auto-render PlantUML diagrams
+            git commit -m "🤖 Auto-render PlantUML diagrams (PNG + SVG)
 
-Rendered PNG images from PlantUML source files.
+Rendered images from PlantUML source files.
+Images cached via jsDelivr CDN: https://cdn.jsdelivr.net/gh/${{ github.repository }}@main/
+
 Triggered by: ${{ github.event_name }}
 Commit: ${{ github.sha }}"
             git push
             echo "✅ Images committed and pushed"
+            echo ""
+            echo "📦 CDN URLs will be available at:"
+            echo "   https://cdn.jsdelivr.net/gh/${{ github.repository }}@main/catalogue/..."
           fi
+
+      - name: Purge jsDelivr cache (optional)
+        if: github.ref == 'refs/heads/main'
+        continue-on-error: true
+        run: |
+          # Purge CDN cache for updated images
+          echo "🔄 Purging jsDelivr cache..."
+          for img in $(git diff --name-only HEAD~1 HEAD -- '*.png' '*.svg' 2>/dev/null | head -10); do
+            curl -s "https://purge.jsdelivr.net/gh/${{ github.repository }}@main/$img" || true
+          done
+          echo "✅ Cache purge requested"

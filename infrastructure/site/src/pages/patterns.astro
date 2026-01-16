@@ -1,19 +1,5 @@
 ---
 import Base from '../layouts/Base.astro';
-import fs from 'node:fs';
-import path from 'node:path';
-
-// Read patterns from the catalogue directory
-const cataloguePath = path.join(process.cwd(), 'catalogue');
-let patterns: any[] = [];
-
-// Try to load patterns.json if it exists
-try {
-  const patternsJson = fs.readFileSync(path.join(process.cwd(), 'public', 'patterns.json'), 'utf-8');
-  patterns = JSON.parse(patternsJson).patterns || [];
-} catch {
-  // Fallback: will be empty
-}
 ---
 
 <Base title="Patterns">
@@ -32,7 +18,7 @@ try {
     </div>
 
     <div class="pattern-grid" id="pattern-grid">
-      <!-- Patterns loaded dynamically -->
+      <div class="loading">Loading patterns...</div>
     </div>
   </div>
 </Base>
@@ -83,17 +69,26 @@ try {
     gap: 1.5rem;
   }
 
+  .loading {
+    grid-column: 1 / -1;
+    text-align: center;
+    color: var(--text-muted);
+    padding: 2rem;
+  }
+
   .pattern-card {
     background: var(--bg-secondary);
     border: 1px solid var(--border);
     border-radius: 8px;
     overflow: hidden;
     transition: all 0.2s;
+    text-decoration: none;
   }
 
   .pattern-card:hover {
     border-color: var(--accent);
     transform: translateY(-2px);
+    text-decoration: none;
   }
 
   .pattern-card .preview {
@@ -117,6 +112,7 @@ try {
   .pattern-card h3 {
     font-size: 1rem;
     margin-bottom: 0.5rem;
+    color: var(--text);
   }
 
   .pattern-card p {
@@ -138,18 +134,45 @@ try {
     border-radius: 4px;
     color: var(--text-muted);
   }
+
+  .placeholder {
+    background: var(--bg);
+    color: var(--text-muted);
+    padding: 2rem;
+    text-align: center;
+    font-size: 0.875rem;
+  }
 </style>
 
 <script>
+  // CDN configuration
+  const CDN = {
+    jsdelivr: 'https://cdn.jsdelivr.net/gh/keugenek/plantuml-ent-kit@main',
+    github: 'https://raw.githubusercontent.com/keugenek/plantuml-ent-kit/main'
+  };
+
+  let patternsData: any = null;
+
   async function loadPatterns() {
     try {
       const response = await fetch('/api/patterns.json');
-      const data = await response.json();
-      renderPatterns(data.patterns);
-      setupFilters(data.patterns);
+      patternsData = await response.json();
+      renderPatterns(patternsData.patterns);
+      setupFilters(patternsData.patterns);
     } catch (err) {
       console.error('Failed to load patterns:', err);
+      document.getElementById('pattern-grid')!.innerHTML =
+        '<div class="loading">Failed to load patterns. Please refresh.</div>';
     }
+  }
+
+  function getImageUrl(pattern: any): string {
+    // Use pre-rendered images from CDN (fast, cached)
+    if (pattern.images?.png) {
+      return `${CDN.jsdelivr}/${pattern.images.png}`;
+    }
+    // Fallback to Kroki live render (slow)
+    return `/kroki/plantuml/png`;
   }
 
   function renderPatterns(patterns: any[], category = 'all') {
@@ -160,22 +183,35 @@ try {
       ? patterns
       : patterns.filter(p => p.category === category);
 
-    grid.innerHTML = filtered.map(p => `
-      <a href="/patterns/${p.slug}" class="pattern-card" data-category="${p.category}">
-        <div class="preview">
-          <img src="/kroki/plantuml/svg/${btoa(p.source || '@startuml\n@enduml')}"
-               alt="${p.name}"
-               loading="lazy">
-        </div>
-        <div class="info">
-          <h3>${p.name}</h3>
-          <p>${p.description}</p>
-          <div class="tags">
-            ${p.keywords.map((k: string) => `<span class="tag">${k}</span>`).join('')}
+    if (filtered.length === 0) {
+      grid.innerHTML = '<div class="loading">No patterns found in this category.</div>';
+      return;
+    }
+
+    grid.innerHTML = filtered.map(p => {
+      const imgUrl = getImageUrl(p);
+      const fallbackUrl = `${CDN.github}/${p.images?.png || ''}`;
+
+      return `
+        <a href="/pattern/${p.slug}" class="pattern-card" data-category="${p.category}">
+          <div class="preview">
+            <img src="${imgUrl}"
+                 alt="${p.name}"
+                 loading="lazy"
+                 decoding="async"
+                 data-fallback="${fallbackUrl}"
+                 onerror="this.onerror=null; this.src=this.dataset.fallback || '/placeholder.svg'">
           </div>
-        </div>
-      </a>
-    `).join('');
+          <div class="info">
+            <h3>${p.name}</h3>
+            <p>${p.description}</p>
+            <div class="tags">
+              ${(p.keywords || []).slice(0, 4).map((k: string) => `<span class="tag">${k}</span>`).join('')}
+            </div>
+          </div>
+        </a>
+      `;
+    }).join('');
   }
 
   function setupFilters(patterns: any[]) {
@@ -189,5 +225,6 @@ try {
     });
   }
 
+  // Load on page ready
   loadPatterns();
 </script>

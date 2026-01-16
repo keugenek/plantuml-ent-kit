@@ -1,6 +1,11 @@
 {
-  "version": "1.0",
+  "version": "1.1",
   "updated": "2025-01-16",
+  "repository": "keugenek/plantuml-ent-kit",
+  "cdn": {
+    "jsdelivr": "https://cdn.jsdelivr.net/gh/keugenek/plantuml-ent-kit@main",
+    "github_raw": "https://raw.githubusercontent.com/keugenek/plantuml-ent-kit/main"
+  },
   "categories": [
     {"id": "ai", "name": "AI/LLM Patterns", "description": "Patterns for AI agents and LLM applications"},
     {"id": "data", "name": "Data Models", "description": "Entity-relationship diagrams and data schemas"},
@@ -16,6 +21,10 @@
       "diagram_type": "plantuml",
       "file": "catalogue/reference-architectures/uml/llm-tool-call.puml",
       "doc": "catalogue/reference-architectures/llm-tool-call.md",
+      "images": {
+        "png": "catalogue/reference-architectures/images/llm-tool-call.png",
+        "svg": "catalogue/reference-architectures/images/llm-tool-call.svg"
+      },
       "keywords": ["llm", "function calling", "tool use", "openai", "anthropic", "agents"]
     },
     {
@@ -26,6 +35,10 @@
       "diagram_type": "plantuml",
       "file": "catalogue/reference-architectures/uml/mcp-architecture.puml",
       "doc": "catalogue/reference-architectures/mcp-architecture.md",
+      "images": {
+        "png": "catalogue/reference-architectures/images/mcp-architecture.png",
+        "svg": "catalogue/reference-architectures/images/mcp-architecture.svg"
+      },
       "keywords": ["mcp", "model context protocol", "anthropic", "claude", "tool integration"]
     },
     {
@@ -36,6 +49,10 @@
       "diagram_type": "plantuml",
       "file": "catalogue/reference-architectures/uml/skills-pattern.puml",
       "doc": "catalogue/reference-architectures/skills-pattern.md",
+      "images": {
+        "png": "catalogue/reference-architectures/images/skills-pattern.png",
+        "svg": "catalogue/reference-architectures/images/skills-pattern.svg"
+      },
       "keywords": ["skills", "capabilities", "composable", "agents", "modular"]
     },
     {
@@ -46,6 +63,10 @@
       "diagram_type": "plantuml",
       "file": "catalogue/reference-architectures/uml/agent-orchestration.puml",
       "doc": "catalogue/reference-architectures/agent-orchestration.md",
+      "images": {
+        "png": "catalogue/reference-architectures/images/agent-orchestration.png",
+        "svg": "catalogue/reference-architectures/images/agent-orchestration.svg"
+      },
       "keywords": ["multi-agent", "orchestration", "coordination", "workflow", "supervisor"]
     },
     {
@@ -56,6 +77,10 @@
       "diagram_type": "plantuml",
       "file": "catalogue/reference-architectures/uml/tool-chaining.puml",
       "doc": "catalogue/reference-architectures/tool-chaining.md",
+      "images": {
+        "png": "catalogue/reference-architectures/images/tool-chaining.png",
+        "svg": "catalogue/reference-architectures/images/tool-chaining.svg"
+      },
       "keywords": ["tool chaining", "pipeline", "sequential", "data flow"]
     },
     {
@@ -66,6 +91,10 @@
       "diagram_type": "plantuml",
       "file": "catalogue/reference-architectures/uml/agentic-rag.pu",
       "doc": "catalogue/reference-architectures/agentic-rag.md",
+      "images": {
+        "png": "catalogue/reference-architectures/images/agentic-rag.png",
+        "svg": "catalogue/reference-architectures/images/agentic-rag.svg"
+      },
       "keywords": ["rag", "retrieval", "vector database", "embeddings", "knowledge base"]
     },
     {
@@ -76,6 +105,10 @@
       "diagram_type": "plantuml",
       "file": "catalogue/reference-architectures/uml/llm-context-management.puml",
       "doc": "catalogue/reference-architectures/llm-context-management.md",
+      "images": {
+        "png": "catalogue/reference-architectures/images/llm-context-management.png",
+        "svg": "catalogue/reference-architectures/images/llm-context-management.svg"
+      },
       "keywords": ["context", "memory", "subagents", "compaction", "summarization", "sliding window"]
     },
     {
@@ -86,6 +119,10 @@
       "diagram_type": "plantuml",
       "file": "catalogue/research-papers/uml/deepseek-engram.puml",
       "doc": "catalogue/research-papers/deepseek-engram.md",
+      "images": {
+        "png": "catalogue/research-papers/images/deepseek-engram.png",
+        "svg": "catalogue/research-papers/images/deepseek-engram.svg"
+      },
       "keywords": ["deepseek", "engram", "n-gram", "memory", "knowledge retrieval", "hash"]
     },
     {
@@ -95,6 +132,10 @@
       "description": "Customer Relationship Management entity-relationship diagram",
       "diagram_type": "plantuml",
       "file": "catalogue/reference-architectures/uml/crm.puml",
+      "images": {
+        "png": "catalogue/reference-architectures/images/crm.png",
+        "svg": "catalogue/reference-architectures/images/crm.svg"
+      },
       "keywords": ["crm", "customer", "contacts", "leads", "sales", "data model"]
     },
     {
@@ -104,6 +145,10 @@
       "description": "CRM system use case diagram",
       "diagram_type": "plantuml",
       "file": "catalogue/reference-architectures/uml/crm-use-cases.puml",
+      "images": {
+        "png": "catalogue/reference-architectures/images/crm-use-cases.png",
+        "svg": "catalogue/reference-architectures/images/crm-use-cases.svg"
+      },
       "keywords": ["crm", "use cases", "requirements", "actors"]
     },
     {
@@ -113,6 +158,10 @@
       "description": "Learning Management System entity-relationship diagram",
       "diagram_type": "plantuml",
       "file": "catalogue/reference-architectures/uml/lms.puml",
+      "images": {
+        "png": "catalogue/reference-architectures/images/lms.png",
+        "svg": "catalogue/reference-architectures/images/lms.svg"
+      },
       "keywords": ["lms", "learning", "courses", "students", "education", "data model"]
     },
     {
@@ -122,6 +171,10 @@
       "description": "Content Management System entity-relationship diagram",
       "diagram_type": "plantuml",
       "file": "catalogue/reference-architectures/uml/cms.puml",
+      "images": {
+        "png": "catalogue/reference-architectures/images/cms.png",
+        "svg": "catalogue/reference-architectures/images/cms.svg"
+      },
       "keywords": ["cms", "content", "articles", "pages", "media", "data model"]
     },
     {
@@ -131,6 +184,10 @@
       "description": "E-commerce platform entity-relationship diagram",
       "diagram_type": "plantuml",
       "file": "catalogue/reference-architectures/uml/ecomm.puml",
+      "images": {
+        "png": "catalogue/reference-architectures/images/ecomm.png",
+        "svg": "catalogue/reference-architectures/images/ecomm.svg"
+      },
       "keywords": ["ecommerce", "orders", "products", "cart", "payments", "data model"]
     },
     {
@@ -140,6 +197,10 @@
       "description": "Hospital Management System entity-relationship diagram",
       "diagram_type": "plantuml",
       "file": "catalogue/reference-architectures/uml/hms.puml",
+      "images": {
+        "png": "catalogue/reference-architectures/images/hms.png",
+        "svg": "catalogue/reference-architectures/images/hms.svg"
+      },
       "keywords": ["hospital", "healthcare", "patients", "doctors", "appointments", "data model"]
     }
   ]

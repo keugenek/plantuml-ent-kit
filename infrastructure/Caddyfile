@@ -1,24 +1,33 @@
 # Caddyfile for pattern-diagrams
-# Works with Tailscale Funnel for public access
+# Serves cached images with CDN fallback
 
 {
-    # Global options
     admin off
     auto_https off  # Tailscale handles HTTPS
 }
 
 :80 {
-    # Aggressive caching for static assets
+    # ===========================================
+    # Image Caching Strategy
+    # ===========================================
+    # Priority:
+    # 1. Local filesystem (committed by CI/CD)
+    # 2. jsDelivr CDN (cached GitHub)
+    # 3. GitHub raw (origin)
+    # 4. Kroki live render (last resort)
+
+    # Aggressive caching for all static assets
     header Cache-Control "public, max-age=31536000, immutable" {
         path *.png
         path *.svg
         path *.jpg
+        path *.webp
         path *.css
         path *.js
         path *.woff2
     }
 
-    # API caching (shorter TTL)
+    # API caching (5 min)
     header Cache-Control "public, max-age=300" {
         path /api/*
     }
@@ -26,15 +35,42 @@
     # Gzip compression
     encode gzip
 
-    # Diagram rendering API - proxy to Kroki
-    handle /kroki/* {
-        uri strip_prefix /kroki
-        reverse_proxy kroki:8000 {
+    # ===========================================
+    # CDN Fallback for Images
+    # ===========================================
+
+    # Proxy to jsDelivr CDN for catalogue images (fallback)
+    handle /cdn/jsdelivr/* {
+        uri strip_prefix /cdn/jsdelivr
+        reverse_proxy https://cdn.jsdelivr.net {
+            header_up Host cdn.jsdelivr.net
             header_down Cache-Control "public, max-age=86400"
         }
     }
 
-    # Static site
+    # Proxy to GitHub raw (second fallback)
+    handle /cdn/github/* {
+        uri strip_prefix /cdn/github
+        reverse_proxy https://raw.githubusercontent.com {
+            header_up Host raw.githubusercontent.com
+            header_down Cache-Control "public, max-age=3600"
+        }
+    }
+
+    # ===========================================
+    # Kroki Diagram Rendering (Live Editor Only)
+    # ===========================================
+    handle /kroki/* {
+        uri strip_prefix /kroki
+        reverse_proxy kroki:8000 {
+            # Cache rendered diagrams for 24 hours
+            header_down Cache-Control "public, max-age=86400"
+        }
+    }
+
+    # ===========================================
+    # Static Site
+    # ===========================================
     handle {
         reverse_proxy site:80
     }
