@@ -1,0 +1,191 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base title="API Documentation">
+  <div class="container">
+    <header class="page-header">
+      <h1>API for AI Agents</h1>
+      <p>Machine-readable endpoints for Claude, GPT, and other AI assistants</p>
+    </header>
+
+    <section class="endpoint">
+      <h2>GET /api/patterns.json</h2>
+      <p>Returns all patterns with metadata, source code, and keywords.</p>
+      <div class="example">
+        <h4>Request</h4>
+        <pre><code>curl https://your-site.ts.net/api/patterns.json</code></pre>
+        <h4>Response</h4>
+        <pre><code>{
+  "version": "1.0",
+  "patterns": [
+    {
+      "slug": "llm-tool-call",
+      "name": "LLM Tool Call",
+      "category": "ai",
+      "description": "Function calling pattern for LLM agents",
+      "diagram_type": "plantuml",
+      "source": "@startuml...",
+      "keywords": ["llm", "function calling", "tool use"],
+      "urls": {
+        "svg": "/kroki/plantuml/svg/...",
+        "png": "/kroki/plantuml/png/...",
+        "source": "/catalogue/reference-architectures/uml/llm-tool-call.puml"
+      }
+    }
+  ]
+}</code></pre>
+      </div>
+    </section>
+
+    <section class="endpoint">
+      <h2>GET /api/patterns.json?q={query}</h2>
+      <p>Search patterns by name, description, or keywords.</p>
+      <div class="example">
+        <h4>Request</h4>
+        <pre><code>curl "https://your-site.ts.net/api/patterns.json?q=authentication"</code></pre>
+      </div>
+    </section>
+
+    <section class="endpoint">
+      <h2>GET /api/patterns.json?category={category}</h2>
+      <p>Filter patterns by category: <code>ai</code>, <code>data</code>, <code>enterprise</code>, <code>research</code></p>
+      <div class="example">
+        <h4>Request</h4>
+        <pre><code>curl "https://your-site.ts.net/api/patterns.json?category=ai"</code></pre>
+      </div>
+    </section>
+
+    <section class="endpoint">
+      <h2>POST /kroki/{type}/svg</h2>
+      <p>Render a diagram to SVG. Supported types: <code>plantuml</code>, <code>mermaid</code>, <code>d2</code>, <code>graphviz</code>, <code>erd</code>, <code>bpmn</code></p>
+      <div class="example">
+        <h4>Request</h4>
+        <pre><code>curl -X POST https://your-site.ts.net/kroki/plantuml/svg \
+  -H "Content-Type: text/plain" \
+  -d '@startuml
+actor User
+User -> App: Request
+@enduml'</code></pre>
+        <h4>Response</h4>
+        <p>Returns SVG image directly.</p>
+      </div>
+    </section>
+
+    <section class="endpoint">
+      <h2>POST /kroki/{type}/png</h2>
+      <p>Render a diagram to PNG.</p>
+      <div class="example">
+        <h4>Request</h4>
+        <pre><code>curl -X POST https://your-site.ts.net/kroki/mermaid/png \
+  -H "Content-Type: text/plain" \
+  -d 'graph TD
+    A[Start] --> B[End]' \
+  --output diagram.png</code></pre>
+      </div>
+    </section>
+
+    <section class="endpoint">
+      <h2>Agent Integration</h2>
+      <p>Add this to your agent's system prompt or CLAUDE.md:</p>
+      <div class="example">
+        <pre><code>When you need architecture diagrams or data models:
+1. Search patterns: GET https://patterns.your-tailnet.ts.net/api/patterns.json?q={query}
+2. Use the source code from the response
+3. Modify as needed for your use case
+4. Render custom diagrams: POST /kroki/plantuml/svg with your code</code></pre>
+      </div>
+    </section>
+
+    <section class="mcp">
+      <h2>MCP Server (Coming Soon)</h2>
+      <p>Direct integration with Claude and other MCP-compatible agents:</p>
+      <pre><code>{
+  "mcpServers": {
+    "pattern-diagrams": {
+      "url": "https://patterns.your-tailnet.ts.net/mcp",
+      "tools": [
+        "search_patterns",
+        "get_pattern",
+        "render_diagram",
+        "list_categories"
+      ]
+    }
+  }
+}</code></pre>
+    </section>
+  </div>
+</Base>
+
+<style>
+  .page-header {
+    padding: 2rem 0;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 2rem;
+  }
+
+  .endpoint {
+    margin-bottom: 3rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .endpoint h2 {
+    font-family: 'Monaco', 'Menlo', monospace;
+    font-size: 1.25rem;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+  }
+
+  .endpoint > p {
+    color: var(--text-muted);
+    margin-bottom: 1rem;
+  }
+
+  .example {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem;
+  }
+
+  .example h4 {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 0.5rem;
+  }
+
+  .example h4:not(:first-child) {
+    margin-top: 1rem;
+  }
+
+  pre {
+    background: var(--bg);
+    padding: 1rem;
+    border-radius: 4px;
+    overflow-x: auto;
+  }
+
+  code {
+    font-family: 'Monaco', 'Menlo', monospace;
+    font-size: 0.875rem;
+    color: var(--text);
+  }
+
+  .mcp {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+  }
+
+  .mcp h2 {
+    margin-bottom: 0.5rem;
+  }
+
+  .mcp p {
+    color: var(--text-muted);
+    margin-bottom: 1rem;
+  }
+</style>

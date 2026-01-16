@@ -1,0 +1,242 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base title="Live Editor">
+  <div class="editor-container">
+    <div class="editor-panel">
+      <div class="panel-header">
+        <h3>PlantUML Source</h3>
+        <select id="diagram-type">
+          <option value="plantuml">PlantUML</option>
+          <option value="mermaid">Mermaid</option>
+          <option value="d2">D2</option>
+          <option value="graphviz">GraphViz</option>
+          <option value="erd">ERD</option>
+        </select>
+      </div>
+      <textarea id="source" spellcheck="false">@startuml
+title My Diagram
+
+actor User
+participant "Frontend" as FE
+participant "Backend" as BE
+database "Database" as DB
+
+User -> FE: Request
+FE -> BE: API Call
+BE -> DB: Query
+DB --> BE: Results
+BE --> FE: Response
+FE --> User: Display
+
+@enduml</textarea>
+      <div class="editor-actions">
+        <button id="render-btn" class="btn primary">Render (Ctrl+Enter)</button>
+        <button id="copy-btn" class="btn secondary">Copy Source</button>
+        <button id="download-btn" class="btn secondary">Download SVG</button>
+      </div>
+    </div>
+    <div class="preview-panel">
+      <div class="panel-header">
+        <h3>Preview</h3>
+        <span id="render-time"></span>
+      </div>
+      <div id="preview">
+        <p class="placeholder">Press Render to see your diagram</p>
+      </div>
+    </div>
+  </div>
+</Base>
+
+<style>
+  .editor-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    height: calc(100vh - 60px);
+    gap: 1px;
+    background: var(--border);
+  }
+
+  .editor-panel,
+  .preview-panel {
+    background: var(--bg);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .panel-header h3 {
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+
+  #diagram-type {
+    padding: 0.25rem 0.5rem;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--text);
+  }
+
+  #source {
+    flex: 1;
+    padding: 1rem;
+    background: var(--bg);
+    border: none;
+    color: var(--text);
+    font-family: 'Monaco', 'Menlo', monospace;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    resize: none;
+  }
+
+  #source:focus {
+    outline: none;
+  }
+
+  .editor-actions {
+    display: flex;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    background: var(--bg-secondary);
+    border-top: 1px solid var(--border);
+  }
+
+  .btn {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.875rem;
+    transition: all 0.2s;
+  }
+
+  .btn.primary {
+    background: var(--accent);
+    color: #fff;
+  }
+
+  .btn.secondary {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+  }
+
+  .btn:hover {
+    transform: translateY(-1px);
+  }
+
+  #preview {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    overflow: auto;
+  }
+
+  #preview img {
+    max-width: 100%;
+    max-height: 100%;
+  }
+
+  .placeholder {
+    color: var(--text-muted);
+  }
+
+  #render-time {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+  }
+
+  .error {
+    color: #f85149;
+    padding: 1rem;
+    text-align: center;
+  }
+
+  @media (max-width: 768px) {
+    .editor-container {
+      grid-template-columns: 1fr;
+      grid-template-rows: 1fr 1fr;
+    }
+  }
+</style>
+
+<script>
+  const source = document.getElementById('source') as HTMLTextAreaElement;
+  const preview = document.getElementById('preview') as HTMLDivElement;
+  const renderBtn = document.getElementById('render-btn') as HTMLButtonElement;
+  const copyBtn = document.getElementById('copy-btn') as HTMLButtonElement;
+  const downloadBtn = document.getElementById('download-btn') as HTMLButtonElement;
+  const diagramType = document.getElementById('diagram-type') as HTMLSelectElement;
+  const renderTime = document.getElementById('render-time') as HTMLSpanElement;
+
+  let lastSvg = '';
+
+  async function render() {
+    const start = performance.now();
+    const type = diagramType.value;
+    const code = source.value;
+
+    try {
+      const response = await fetch(`/kroki/${type}/svg`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain' },
+        body: code
+      });
+
+      if (!response.ok) {
+        throw new Error(await response.text());
+      }
+
+      lastSvg = await response.text();
+      preview.innerHTML = lastSvg;
+
+      const elapsed = Math.round(performance.now() - start);
+      renderTime.textContent = `Rendered in ${elapsed}ms`;
+    } catch (err) {
+      preview.innerHTML = `<p class="error">Error: ${err.message}</p>`;
+      renderTime.textContent = '';
+    }
+  }
+
+  renderBtn.addEventListener('click', render);
+
+  copyBtn.addEventListener('click', () => {
+    navigator.clipboard.writeText(source.value);
+    copyBtn.textContent = 'Copied!';
+    setTimeout(() => copyBtn.textContent = 'Copy Source', 1500);
+  });
+
+  downloadBtn.addEventListener('click', () => {
+    if (!lastSvg) return;
+    const blob = new Blob([lastSvg], { type: 'image/svg+xml' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'diagram.svg';
+    a.click();
+    URL.revokeObjectURL(url);
+  });
+
+  // Keyboard shortcut
+  source.addEventListener('keydown', (e) => {
+    if (e.ctrlKey && e.key === 'Enter') {
+      e.preventDefault();
+      render();
+    }
+  });
+
+  // Auto-render on load
+  render();
+</script>

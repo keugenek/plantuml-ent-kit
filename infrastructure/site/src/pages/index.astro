@@ -1,0 +1,187 @@
+---
+import Base from '../layouts/Base.astro';
+
+// Load patterns from JSON
+const patterns = await fetch(new URL('/patterns.json', Astro.url)).then(r => r.json()).catch(() => ({
+  patterns: [],
+  categories: []
+}));
+---
+
+<Base title="Home">
+  <div class="container">
+    <section class="hero">
+      <h1>Architecture Patterns as Code</h1>
+      <p class="subtitle">
+        Machine-readable diagrams for humans and AI agents.
+        PlantUML, Mermaid, ERD, and more.
+      </p>
+      <div class="hero-actions">
+        <a href="/patterns" class="btn primary">Browse Patterns</a>
+        <a href="/api" class="btn secondary">API for Agents</a>
+        <a href="/editor" class="btn secondary">Live Editor</a>
+      </div>
+    </section>
+
+    <section class="features">
+      <div class="feature">
+        <span class="icon">⚡</span>
+        <h3>Blazing Fast</h3>
+        <p>Self-hosted Kroki server renders diagrams in &lt;50ms</p>
+      </div>
+      <div class="feature">
+        <span class="icon">🤖</span>
+        <h3>Agent-Native</h3>
+        <p>JSON API for Claude, GPT, and other AI assistants</p>
+      </div>
+      <div class="feature">
+        <span class="icon">📐</span>
+        <h3>Multi-Format</h3>
+        <p>PlantUML, Mermaid, D2, ERD, GraphViz, BPMN</p>
+      </div>
+      <div class="feature">
+        <span class="icon">🏠</span>
+        <h3>Self-Hosted</h3>
+        <p>Runs on your infrastructure via Tailscale</p>
+      </div>
+    </section>
+
+    <section class="categories">
+      <h2>Pattern Categories</h2>
+      <div class="category-grid">
+        <a href="/patterns?category=ai" class="card">
+          <span class="badge ai">AI/LLM</span>
+          <h3>AI & Agent Patterns</h3>
+          <p>Tool calling, MCP, orchestration, context management</p>
+        </a>
+        <a href="/patterns?category=data" class="card">
+          <span class="badge data">Data</span>
+          <h3>Data Models</h3>
+          <p>ERD diagrams, schemas, relationships</p>
+        </a>
+        <a href="/patterns?category=enterprise" class="card">
+          <span class="badge enterprise">Enterprise</span>
+          <h3>Enterprise Architecture</h3>
+          <p>Microservices, event-driven, CQRS</p>
+        </a>
+        <a href="/patterns?category=research" class="card">
+          <span class="badge">Research</span>
+          <h3>Research Papers</h3>
+          <p>Visual summaries of important papers</p>
+        </a>
+      </div>
+    </section>
+
+    <section class="quick-start">
+      <h2>Quick Start for Agents</h2>
+      <pre><code># Fetch all patterns
+curl https://your-site.ts.net/api/patterns.json
+
+# Search patterns
+curl https://your-site.ts.net/api/patterns.json?q=authentication
+
+# Render a diagram
+curl -X POST https://your-site.ts.net/kroki/plantuml/svg \
+  -d '@startuml\nA -> B\n@enduml'</code></pre>
+    </section>
+  </div>
+</Base>
+
+<style>
+  .hero {
+    text-align: center;
+    padding: 4rem 0;
+  }
+
+  .hero h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+  }
+
+  .subtitle {
+    font-size: 1.25rem;
+    color: var(--text-muted);
+    margin-bottom: 2rem;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+  }
+
+  .btn {
+    padding: 0.75rem 1.5rem;
+    border-radius: 6px;
+    font-weight: 500;
+    transition: all 0.2s;
+  }
+
+  .btn.primary {
+    background: var(--accent);
+    color: #fff;
+  }
+
+  .btn.secondary {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+  }
+
+  .btn:hover {
+    text-decoration: none;
+    transform: translateY(-2px);
+  }
+
+  .features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+    padding: 3rem 0;
+  }
+
+  .feature {
+    text-align: center;
+  }
+
+  .feature .icon {
+    font-size: 2rem;
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+
+  .categories {
+    padding: 3rem 0;
+  }
+
+  .categories h2 {
+    margin-bottom: 1.5rem;
+  }
+
+  .category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+  }
+
+  .category-grid .card h3 {
+    margin: 0.75rem 0 0.5rem;
+  }
+
+  .quick-start {
+    padding: 3rem 0;
+  }
+
+  .quick-start pre {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    overflow-x: auto;
+  }
+
+  .quick-start code {
+    color: var(--text);
+    font-family: 'Monaco', 'Menlo', monospace;
+    font-size: 0.875rem;
+  }
+</style>

@@ -1,0 +1,193 @@
+---
+import Base from '../layouts/Base.astro';
+import fs from 'node:fs';
+import path from 'node:path';
+
+// Read patterns from the catalogue directory
+const cataloguePath = path.join(process.cwd(), 'catalogue');
+let patterns: any[] = [];
+
+// Try to load patterns.json if it exists
+try {
+  const patternsJson = fs.readFileSync(path.join(process.cwd(), 'public', 'patterns.json'), 'utf-8');
+  patterns = JSON.parse(patternsJson).patterns || [];
+} catch {
+  // Fallback: will be empty
+}
+---
+
+<Base title="Patterns">
+  <div class="container">
+    <header class="page-header">
+      <h1>Architecture Patterns</h1>
+      <p>Browse all patterns or filter by category</p>
+    </header>
+
+    <div class="filters">
+      <button class="filter active" data-category="all">All</button>
+      <button class="filter" data-category="ai">AI/LLM</button>
+      <button class="filter" data-category="data">Data Models</button>
+      <button class="filter" data-category="enterprise">Enterprise</button>
+      <button class="filter" data-category="research">Research</button>
+    </div>
+
+    <div class="pattern-grid" id="pattern-grid">
+      <!-- Patterns loaded dynamically -->
+    </div>
+  </div>
+</Base>
+
+<style>
+  .page-header {
+    padding: 2rem 0;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 2rem;
+  }
+
+  .page-header h1 {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .page-header p {
+    color: var(--text-muted);
+  }
+
+  .filters {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .filter {
+    padding: 0.5rem 1rem;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .filter:hover,
+  .filter.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+  }
+
+  .pattern-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .pattern-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: all 0.2s;
+  }
+
+  .pattern-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+  }
+
+  .pattern-card .preview {
+    background: #fff;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 150px;
+  }
+
+  .pattern-card .preview img {
+    max-width: 100%;
+    max-height: 150px;
+  }
+
+  .pattern-card .info {
+    padding: 1rem;
+  }
+
+  .pattern-card h3 {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .pattern-card p {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    margin-bottom: 0.75rem;
+  }
+
+  .pattern-card .tags {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .tag {
+    font-size: 0.75rem;
+    padding: 0.125rem 0.5rem;
+    background: var(--bg);
+    border-radius: 4px;
+    color: var(--text-muted);
+  }
+</style>
+
+<script>
+  async function loadPatterns() {
+    try {
+      const response = await fetch('/api/patterns.json');
+      const data = await response.json();
+      renderPatterns(data.patterns);
+      setupFilters(data.patterns);
+    } catch (err) {
+      console.error('Failed to load patterns:', err);
+    }
+  }
+
+  function renderPatterns(patterns: any[], category = 'all') {
+    const grid = document.getElementById('pattern-grid');
+    if (!grid) return;
+
+    const filtered = category === 'all'
+      ? patterns
+      : patterns.filter(p => p.category === category);
+
+    grid.innerHTML = filtered.map(p => `
+      <a href="/patterns/${p.slug}" class="pattern-card" data-category="${p.category}">
+        <div class="preview">
+          <img src="/kroki/plantuml/svg/${btoa(p.source || '@startuml\n@enduml')}"
+               alt="${p.name}"
+               loading="lazy">
+        </div>
+        <div class="info">
+          <h3>${p.name}</h3>
+          <p>${p.description}</p>
+          <div class="tags">
+            ${p.keywords.map((k: string) => `<span class="tag">${k}</span>`).join('')}
+          </div>
+        </div>
+      </a>
+    `).join('');
+  }
+
+  function setupFilters(patterns: any[]) {
+    document.querySelectorAll('.filter').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const category = btn.getAttribute('data-category') || 'all';
+        renderPatterns(patterns, category);
+      });
+    });
+  }
+
+  loadPatterns();
+</script>
