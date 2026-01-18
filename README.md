@@ -1,134 +1,117 @@
-# Ent Kit: PlantUML-based Entity Modeling Toolkit with Reference Architecture Catalogue
+# Pattern Diagrams: Architecture Patterns & Data Models
 
-Ent Kit provides a comprehensive guide and examples for utilizing PlantUML to create entity
-models within Visual Studio Code (VS Code).
-This repository serves as a starting point for analysts, developers, and data architects
-to dive into entity modeling using an intuitive graphical notation provided by PlantUML.
+A collection of architecture patterns, data models, and research paper diagrams in PlantUML format.
 
-## Agentic Workflow
+**Infrastructure & Tooling**: See [plantuml-ent-kit-infra](https://github.com/keugenek/plantuml-ent-kit-infra) for self-hosting, CI/CD workflows, and agent APIs.
 
-This repository is designed for **agentic development** - AI agents can easily add new patterns and diagrams:
+## Quick Start
 
-1. **Auto-Rendering**: GitHub Actions automatically renders all PlantUML files (`.puml`, `.pu`, `.plantuml`) to PNG
-2. **Auto-Commit**: Rendered images are automatically committed back to the repository
-3. **Any Branch**: Works on all branches, not just main - perfect for agent workflows
+```bash
+# Browse patterns
+ls catalogue/reference-architectures/uml/
 
-**For AI Agents**: See [AGENTS.md](AGENTS.md) for detailed instructions on adding new patterns.
+# View pre-rendered images (cached via jsDelivr CDN)
+https://cdn.jsdelivr.net/gh/keugenek/plantuml-ent-kit@main/catalogue/reference-architectures/images/mcp-architecture.png
+```
 
-## What is Entity Modeling?
+## Pattern Categories
 
-Entity Modeling is a form of conceptual data modeling that visually represents the structure
-and relationships of information within a domain. It's used to provide a clear understanding
-of the entities, attributes, and relationships that exist within a system or domain,
-facilitating better design, communication, and documentation.
+### AI/LLM Patterns
 
-Typical features of Entity Modeling tools include:
-- Entity definition and relationship mapping.
-- Attribute definition and data type specification.
-- Graphical representation of entities and relationships.
-- Validation of model consistency and integrity.
-- Generation of database schemas or code from models.
+| Pattern | Description |
+|---------|-------------|
+| [LLM Tool Call](catalogue/reference-architectures/llm-tool-call.md) | Function calling sequence |
+| [LLM Context Management](catalogue/reference-architectures/llm-context-management.md) | Subagents, RAG, compaction, sliding windows |
+| [Model Context Protocol (MCP)](catalogue/reference-architectures/mcp-architecture.md) | Anthropic's tool integration standard |
+| [Skills Pattern](catalogue/reference-architectures/skills-pattern.md) | Composable agent capabilities |
+| [Agent Orchestration](catalogue/reference-architectures/agent-orchestration.md) | Multi-agent coordination |
+| [Tool Chaining](catalogue/reference-architectures/tool-chaining.md) | Sequential tool execution |
+| [Agentic RAG](catalogue/reference-architectures/agentic-rag.md) | Retrieval-augmented generation |
 
-## Reference Architecture Catalogue
+### Data Models (ERD)
 
-Reference Architectures is well-known designs widely used in various companies that proved
-themselves as a standard way of doing something.
+| Model | Description |
+|-------|-------------|
+| [CRM](catalogue/reference-architectures/crm.md) | Customer Relationship Management |
+| [E-Commerce](catalogue/reference-architectures/ecomm.md) | Online store platform |
+| [LMS](catalogue/reference-architectures/lms.md) | Learning Management System |
+| [CMS](catalogue/reference-architectures/cms.md) | Content Management System |
+| [HMS](catalogue/reference-architectures/hms.md) | Hospital Management System |
 
-[Catalogue](catalogue/) contains a set of Reference Architectures described in PlantUML.
+### Research Papers
 
-See following examples of Reference Entity Models:
-* [Customer Relationship Management (CRM) System Reference Model](catalogue/reference-architectures/crm.md)
-* [E-Commerce System Model](catalogue/reference-architectures/ecomm.md)
-* [Learning Management System (LMS) Model](catalogue/reference-architectures/lms.md)
-* [Content Management System (CMS) Model](catalogue/reference-architectures/cms.md)
+| Paper | Description |
+|-------|-------------|
+| [DeepSeek Engram](catalogue/research-papers/deepseek-engram.md) | O(1) knowledge retrieval via n-gram hashing |
 
-See following examples of AI/LLM Architecture Patterns:
-* [LLM Tool Call Pattern](catalogue/reference-architectures/llm-tool-call.md)
-* [LLM Context Management](catalogue/reference-architectures/llm-context-management.md) - Subagents, RAG, compaction, sliding windows
-* [Model Context Protocol (MCP)](catalogue/reference-architectures/mcp-architecture.md)
-* [Skills Pattern](catalogue/reference-architectures/skills-pattern.md)
-* [Agent Orchestration](catalogue/reference-architectures/agent-orchestration.md)
-* [Tool Chaining](catalogue/reference-architectures/tool-chaining.md)
-* [Agentic RAG](catalogue/reference-architectures/agentic-rag.md)
+## Repository Structure
 
-## Research Papers
+```
+catalogue/
+├── reference-architectures/
+│   ├── uml/           # PlantUML source files
+│   ├── images/        # Pre-rendered PNG/SVG (auto-generated)
+│   └── *.md           # Documentation
+├── research-papers/
+│   ├── uml/
+│   ├── images/
+│   └── *.md
+└── data-models/       # Coming soon
+```
 
-Diagrams explaining key AI/ML research papers:
+## Auto-Rendering
 
-* [DeepSeek Engram: Conditional Memory via N-gram Lookup](catalogue/research-papers/deepseek-engram.md) - O(1) knowledge retrieval using hashed n-gram embeddings
+GitHub Actions automatically renders all PlantUML files to PNG/SVG on push:
 
-## Designing an Entity Model using PlantUML
+1. Edit any `.puml` file
+2. Push to any branch
+3. Workflow renders and commits images
+4. Images cached globally via jsDelivr CDN
 
-PlantUML provides a simple and intuitive textual notation for creating diagrams, including entity models. Here’s a basic example of an entity model representing a simple bookstore:
+## For AI Agents
+
+This repo is designed for agentic workflows. Agents can:
+
+1. **Find patterns**: Search `catalogue/*/uml/*.puml`
+2. **Copy and modify**: Use existing patterns as templates
+3. **Auto-render**: Push changes, GitHub Actions renders images
+
+See [plantuml-ent-kit-infra](https://github.com/keugenek/plantuml-ent-kit-infra) for:
+- Machine-readable `patterns.json` index
+- Self-hosted diagram server
+- Agent API documentation
+- `CLAUDE.md` for agent discovery
+
+## PlantUML Quick Reference
 
 ```plantuml
 @startuml
-entity "Author" as author {
-  +AuthorID: int
-  FirstName: string
-  LastName: string
-}
+title My Diagram
 
-entity "Book" as book {
-  +BookID: int
-  Title: string
-  PublishedDate: date
-}
+actor User
+participant "Service" as S
+database "DB" as DB
 
-author -- book : writes
+User -> S: request
+S -> DB: query
+DB --> S: result
+S --> User: response
+
 @enduml
 ```
 
-### In this example:
+## Local Development
 
-Two entities, Author and Book, are defined along with their attributes.
+1. Install [VS Code PlantUML extension](https://marketplace.visualstudio.com/items?itemName=jebbs.plantuml)
+2. Install [Graphviz](https://graphviz.org/download/)
+3. Right-click in `.puml` file → Preview Current Diagram
 
-A relationship is established between Author and Book indicating that an author writes a book.
+## Contributing
 
-![Rendered diagram](docs/images/readme-example1.png)
+1. Create PlantUML file in `catalogue/*/uml/`
+2. Add documentation `.md` file
+3. Push - GitHub Actions renders images automatically
 
-## Template PlantUML Design Project
+## License
 
-The following repository can be used as a starting point for designing 
-
-# Setting up Visual Studio Code for PlantUML and Entity Modeling
-
-Now follow below steps to set up VS Code for PlantUML and Entity Modeling.
-
-## Install Visual Studio Code:
-
-Download and install Visual Studio Code from the official website: https://code.visualstudio.com/download
-
-## Install PlantUML Extension:
-Open VS Code, go to Extensions (you can use the shortcut Ctrl+Shift+X), search for PlantUML,
-and click Install on the PlantUML extension by Jebbs.
-
-## Install Graphviz (Optional):
-To render diagrams, install Graphviz from the official website: https://graphviz.org/download/
-After installation, ensure that the Graphviz bin directory is added to your system's PATH.
-
-## Configure PlantUML Extension (if necessary):
-Open the settings (File > Preferences > Settings), search for PlantUML, and configure any necessary
-settings such as the PlantUML server or local render settings.
-
-* Make sure to set up 'java' location if it is not in path folder.
-* Configure output folder, default format, etc.
-
-## Create a New PlantUML File:
-Create a new file with a .puml extension, and start modeling your entities as shown in the example above.
-
-## Viewing Your Diagrams:
-To view your diagrams, right-click anywhere in the editor and select PlantUML: Preview Current Diagram.
-Now, you are all set to start creating entity models using PlantUML in Visual Studio Code!
-
-![Render Diagrams In Visual Studio](docs/images/readme-screenshot2.png)
-
-
-# Contributing
-Feel free to contribute to this repository by submitting issues, improving the documentation, or submitting pull requests.
-
-# License
-This project is licensed under the MIT License.
-
-# Contact
-For any inquiries or feedback, please open an issue on this repository.
+MIT
