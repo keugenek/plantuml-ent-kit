@@ -1,0 +1,99 @@
+@startuml llm-model-guide
+
+skinparam backgroundColor #FEFEFE
+skinparam defaultFontName Arial
+
+title LLM Model Selection Decision Tree
+
+start
+
+:What is your primary requirement?;
+
+if (Need self-hosting or data privacy?) then (yes)
+  :Consider Open-Weights Models;
+  fork
+    :Llama 4 (Meta);
+  fork again
+    :Mixtral (Mistral);
+  fork again
+    :DeepSeek V3;
+  end fork
+  stop
+else (no)
+endif
+
+if (Complex reasoning, math, or science?) then (yes)
+  :Consider Reasoning Models;
+  fork
+    :Claude Opus 4.5;
+  fork again
+    :OpenAI o3;
+  fork again
+    :Gemini 2.5 Pro;
+  end fork
+  stop
+else (no)
+endif
+
+if (Primary use is code generation?) then (yes)
+  :Consider Code-Optimized Models;
+  fork
+    :Claude Sonnet 4;
+  fork again
+    :Codestral (Mistral);
+  fork again
+    :GPT-4.1;
+  end fork
+  stop
+else (no)
+endif
+
+if (Need RAG or enterprise search?) then (yes)
+  :Consider RAG-Optimized Models;
+  fork
+    :Cohere Command R+;
+  fork again
+    :Claude with citations;
+  end fork
+  stop
+else (no)
+endif
+
+if (Need very long context >200K tokens?) then (yes)
+  :Consider Large Context Models;
+  fork
+    :Gemini 2.5 Pro 1M;
+  fork again
+    :GPT-4.1 1M;
+  fork again
+    :Llama 4 Scout 10M;
+  end fork
+  stop
+else (no)
+endif
+
+if (High volume, cost-sensitive?) then (yes)
+  :Consider Economy Models;
+  fork
+    :Claude Haiku 3.5;
+  fork again
+    :GPT-4.1-mini;
+  fork again
+    :Gemini 2.5 Flash;
+  end fork
+  stop
+else (no)
+endif
+
+:Default: Balanced General-Purpose;
+fork
+  :Claude Sonnet 4;
+fork again
+  :GPT-4.1;
+fork again
+  :Gemini 2.5 Pro;
+end fork
+
+stop
+
+@enduml

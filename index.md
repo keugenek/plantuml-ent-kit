@@ -25,6 +25,7 @@ PlantUML-based Entity Modeling Toolkit with Reference Architecture Catalogue.
 | [Agent Orchestration](catalogue/reference-architectures/agent-orchestration.md) | Multi-agent coordination |
 | [Tool Chaining](catalogue/reference-architectures/tool-chaining.md) | Sequential tool execution |
 | [Agentic RAG](catalogue/reference-architectures/agentic-rag.md) | Retrieval-augmented generation |
+| [LLM Model Guide](catalogue/reference-architectures/llm-model-guide.md) | Provider comparison and selection criteria |
 
 ---
 

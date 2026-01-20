@@ -50,6 +50,7 @@ See following examples of AI/LLM Architecture Patterns:
 * [Agent Orchestration](catalogue/reference-architectures/agent-orchestration.md)
 * [Tool Chaining](catalogue/reference-architectures/tool-chaining.md)
 * [Agentic RAG](catalogue/reference-architectures/agentic-rag.md)
+* [LLM Model Guide](catalogue/reference-architectures/llm-model-guide.md) - Provider comparison and selection criteria
 
 ## Research Papers
 
