@@ -1,0 +1,73 @@
+@startuml
+
+!define table(x) class x << (T,#FFAAAA) >>
+!define primary_key(x) <b>x</b>
+!define foreign_key(x) <color:red>x</color>
+
+table(Product) {
+  +primary_key(ProductID): int
+  ProductName: varchar(255)
+  Price: decimal(10,2)
+  Stock: int
+  +foreign_key(CategoryID): int
+}
+
+table(Customer) {
+  +primary_key(CustomerID): int
+  FirstName: varchar(255)
+  LastName: varchar(255)
+  Email: varchar(255)
+  Password: varchar(255)
+}
+
+table(Order) {
+  +primary_key(OrderID): int
+  +foreign_key(CustomerID): int
+  OrderDate: date
+  TotalAmount: decimal(10,2)
+}
+
+table(ShoppingCart) {
+  +primary_key(CartID): int
+  +foreign_key(CustomerID): int
+}
+
+table(Payment) {
+  +primary_key(PaymentID): int
+  +foreign_key(OrderID): int
+  PaymentMethod: varchar(50)
+  PaymentDate: date
+  Amount: decimal(10,2)
+}
+
+table(Shipping) {
+  +primary_key(ShippingID): int
+  +foreign_key(OrderID): int
+  ShippingAddress: varchar(255)
+  ShippingDate: date
+  DeliveryDate: date
+}
+
+table(Category) {
+  +primary_key(CategoryID): int
+  CategoryName: varchar(255)
+}
+
+table(Review) {
+  +primary_key(ReviewID): int
+  +foreign_key(ProductID): int
+  +foreign_key(CustomerID): int
+  Rating: int
+  Comment: text
+}
+
+Product -- Category : categorized as
+Product -- Review : has
+Customer -- ShoppingCart : owns
+Customer -- Order : places
+Customer -- Review : writes
+Order -- Payment : has
+Order -- Shipping : has
+ShoppingCart -- Product : contains
+
+@enduml

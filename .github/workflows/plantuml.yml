@@ -107,7 +107,10 @@ jobs:
               dir=$(dirname "$file")
               filename=$(basename "$file")
               name="${filename%.*}"
-              if [[ "$dir" == *"/uml"* ]]; then
+              # New structure: patterns/*/diagram.puml → same dir
+              if [[ "$filename" == "diagram.puml" || "$filename" == "diagram.pu" ]]; then
+                output_dir="$dir"
+              elif [[ "$dir" == *"/uml"* ]]; then
                 output_dir="${dir/\/uml/\/images}"
               else
                 output_dir="$dir/images"
@@ -136,7 +139,11 @@ jobs:
             filename=$(basename "$file")
             name="${filename%.*}"
 
-            if [[ "$dir" == *"/uml"* ]]; then
+            # New structure: patterns/*/diagram.puml → same dir
+            # Legacy structure: */uml/*.puml → */images/
+            if [[ "$filename" == "diagram.puml" || "$filename" == "diagram.pu" ]]; then
+              output_dir="$dir"
+            elif [[ "$dir" == *"/uml"* ]]; then
               output_dir="${dir/\/uml/\/images}"
             else
               output_dir="$dir/images"

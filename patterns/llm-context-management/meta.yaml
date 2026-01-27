@@ -1,0 +1,11 @@
+name: LLM Context Management
+category: ai-patterns
+tags: [llm, context, rag, memory, compaction]
+complexity: intermediate
+diagram_type: component
+description: Strategies for managing LLM context windows including RAG, compaction, and sliding windows
+use_cases:
+  - Long conversation handling
+  - Document processing
+  - Memory management
+related: [agentic-rag, skills-pattern]

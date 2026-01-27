@@ -1,0 +1,65 @@
+@startuml
+
+!define table(x) class x << (T,#FFAAAA) >>
+!define primary_key(x) <b>x</b>
+!define foreign_key(x) <color:red>x</color>
+
+table(Customer) {
+  +primary_key(CustomerID): int
+  FirstName: varchar(255)
+  LastName: varchar(255)
+  Email: varchar(255)
+  Phone: varchar(15)
+}
+
+table(Contact) {
+  +primary_key(ContactID): int
+  +foreign_key(CustomerID): int
+  ContactType: varchar(50)
+  ContactValue: varchar(255)
+}
+
+table(Opportunity) {
+  +primary_key(OpportunityID): int
+  +foreign_key(CustomerID): int
+  OpportunityName: varchar(255)
+  Stage: varchar(50)
+  CloseDate: date
+}
+
+table(Lead) {
+  +primary_key(LeadID): int
+  LeadSource: varchar(255)
+  Status: varchar(50)
+}
+
+table(Account) {
+  +primary_key(AccountID): int
+  AccountName: varchar(255)
+  Industry: varchar(255)
+}
+
+table(Case) {
+  +primary_key(CaseID): int
+  +foreign_key(CustomerID): int
+  +foreign_key(AccountID): int
+  Subject: varchar(255)
+  Status: varchar(50)
+  Priority: varchar(50)
+}
+
+table(Activity) {
+  +primary_key(ActivityID): int
+  +foreign_key(CustomerID): int
+  ActivityType: varchar(50)
+  Description: text
+  DueDate: date
+}
+
+Customer -- Contact : has
+Customer -- Opportunity : has
+Customer -- Case : has
+Customer -- Activity : has
+Account -- Case : has
+
+@enduml

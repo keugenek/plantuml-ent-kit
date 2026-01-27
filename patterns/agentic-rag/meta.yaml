@@ -1,0 +1,11 @@
+name: Agentic RAG
+category: ai-patterns
+tags: [rag, llm, retrieval, agents, embeddings]
+complexity: intermediate
+diagram_type: component
+description: Retrieval-augmented generation with agent-driven query refinement
+use_cases:
+  - Knowledge-augmented chatbots
+  - Document Q&A systems
+  - Enterprise search
+related: [llm-context-management, tool-chaining]

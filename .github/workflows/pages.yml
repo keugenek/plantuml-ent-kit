@@ -53,7 +53,10 @@ jobs:
             name="${filename%.*}"
 
             # Determine output directory
-            if [[ "$dir" == *"/uml"* ]]; then
+            # New structure: patterns/*/diagram.puml → same dir
+            if [[ "$filename" == "diagram.puml" || "$filename" == "diagram.pu" ]]; then
+              output_dir="$dir"
+            elif [[ "$dir" == *"/uml"* ]]; then
               output_dir="${dir/\/uml/\/images}"
             else
               output_dir="$dir/images"
@@ -68,7 +71,7 @@ jobs:
               continue
             fi
 
-            echo "  🔄 Rendering: $file"
+            echo "  🔄 Rendering: $file -> $output_dir/$name.png"
             java -jar /tmp/plantuml/plantuml.jar -tpng -o "$(realpath "$output_dir")" "$file" || true
           done
 
@@ -98,6 +101,7 @@ jobs:
             collections: true
           include:
             - catalogue
+            - patterns
             - docs
             - AGENTS.md
           exclude:

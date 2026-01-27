@@ -1,0 +1,117 @@
+# PlantUML Ent Kit - Pattern Catalogue
+# Machine-readable index for agents and automation
+version: "1.0"
+updated: "2026-01-27"
+
+categories:
+  ai-patterns:
+    name: AI/LLM Patterns
+    description: Reference architectures for AI-powered applications and agent systems
+  entity-models:
+    name: Entity Models
+    description: Domain-specific entity-relationship models for enterprise systems
+  research-papers:
+    name: Research Papers
+    description: Diagrams explaining key concepts from AI/ML research publications
+
+patterns:
+  # AI/LLM Patterns
+  - id: agentic-rag
+    path: patterns/agentic-rag
+    name: Agentic RAG
+    category: ai-patterns
+    tags: [rag, llm, retrieval, agents]
+    complexity: intermediate
+
+  - id: agent-orchestration
+    path: patterns/agent-orchestration
+    name: Agent Orchestration
+    category: ai-patterns
+    tags: [agents, orchestration, multi-agent]
+    complexity: advanced
+
+  - id: llm-tool-call
+    path: patterns/llm-tool-call
+    name: LLM Tool Call
+    category: ai-patterns
+    tags: [llm, tools, function-calling]
+    complexity: beginner
+
+  - id: llm-context-management
+    path: patterns/llm-context-management
+    name: LLM Context Management
+    category: ai-patterns
+    tags: [llm, context, memory]
+    complexity: intermediate
+
+  - id: mcp-architecture
+    path: patterns/mcp-architecture
+    name: Model Context Protocol (MCP)
+    category: ai-patterns
+    tags: [mcp, anthropic, protocol]
+    complexity: intermediate
+
+  - id: skills-pattern
+    path: patterns/skills-pattern
+    name: Skills Pattern
+    category: ai-patterns
+    tags: [skills, agents, modular]
+    complexity: intermediate
+
+  - id: tool-chaining
+    path: patterns/tool-chaining
+    name: Tool Chaining
+    category: ai-patterns
+    tags: [tools, chaining, workflow]
+    complexity: beginner
+
+  # Entity Models
+  - id: crm
+    path: patterns/crm
+    name: CRM Entity Model
+    category: entity-models
+    tags: [crm, database, customers]
+    complexity: beginner
+
+  - id: ecomm
+    path: patterns/ecomm
+    name: E-Commerce Entity Model
+    category: entity-models
+    tags: [ecommerce, products, orders]
+    complexity: beginner
+
+  - id: lms
+    path: patterns/lms
+    name: LMS Entity Model
+    category: entity-models
+    tags: [lms, education, courses]
+    complexity: beginner
+
+  - id: cms
+    path: patterns/cms
+    name: CMS Entity Model
+    category: entity-models
+    tags: [cms, content, pages]
+    complexity: beginner
+
+  - id: hms
+    path: patterns/hms
+    name: HMS Entity Model
+    category: entity-models
+    tags: [hms, healthcare, patients]
+    complexity: beginner
+
+  # Research Papers
+  - id: deepseek-engram
+    path: patterns/deepseek-engram
+    name: DeepSeek Engram
+    category: research-papers
+    tags: [research, memory, ngram]
+    complexity: advanced
+
+# Schema for pattern folders:
+# patterns/<id>/
+#   ├── README.md      # Human-readable documentation
+#   ├── meta.yaml      # Machine-readable metadata
+#   ├── diagram.puml   # PlantUML source
+#   └── diagram.png    # Rendered diagram

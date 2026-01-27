@@ -1,0 +1,11 @@
+name: HMS Entity Model
+category: entity-models
+tags: [hms, healthcare, database, patients, appointments]
+complexity: beginner
+diagram_type: entity
+description: Hospital Management System entity-relationship model
+use_cases:
+  - Hospital systems
+  - Clinic management
+  - Patient records
+related: [crm]

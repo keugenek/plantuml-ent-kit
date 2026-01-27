@@ -1,0 +1,11 @@
+name: LMS Entity Model
+category: entity-models
+tags: [lms, education, database, courses, students]
+complexity: beginner
+diagram_type: entity
+description: Learning Management System entity-relationship model
+use_cases:
+  - Online learning platforms
+  - Course management
+  - Student tracking
+related: [cms, crm]
