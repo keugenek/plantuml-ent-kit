@@ -1,0 +1,127 @@
+@startuml agentic-team-flow
+
+title Agentic Team Flow - Human + AI Collaboration
+
+skinparam participant {
+    BackgroundColor #E3F2FD
+    BorderColor #1565C0
+}
+
+skinparam actor {
+    BackgroundColor #BBDEFB
+}
+
+skinparam database {
+    BackgroundColor #FFF3E0
+    BorderColor #EF6C00
+}
+
+actor "Developer" as Dev
+actor "Team Lead" as Lead
+participant "AI Agent" as Agent
+participant "CI/CD" as CI
+participant "Notifications" as Notify
+database "develop" as Develop
+database "feature/*" as Feature
+database "release/*" as Release
+database "main" as Main
+
+== Feature Development ==
+Dev -> Feature : Create feature branch
+Dev -> Feature : Implement changes
+Dev -> Feature : Push commits
+Dev -> Develop : Create Pull Request
+activate Dev
+
+== Automated Review ==
+Dev -> Agent : PR triggers agent
+activate Agent
+Agent -> CI : Trigger pipeline
+activate CI
+CI -> CI : Run tests
+CI -> CI : Lint & format check
+CI -> CI : Build
+CI -> CI : Security scan
+CI --> Agent : Report results
+deactivate CI
+
+alt All Checks Pass
+    Agent -> Agent : Generate review summary
+    Agent -> Dev : ✅ Ready for review
+    Agent -> Notify : Notify reviewers
+else Issues Found
+    Agent -> Agent : Identify issues
+    Agent -> Dev : 📝 Suggest fixes
+    alt Auto-fixable
+        Agent -> Feature : Apply auto-fixes
+        Agent -> Dev : 🔧 Auto-fixed, please verify
+    else Manual Fix Required
+        Agent -> Dev : ⚠️ Manual fix needed
+        deactivate Agent
+        Dev -> Feature : Fix issues
+        Dev -> Develop : Update PR
+        activate Agent
+    end
+end
+
+== Human Review ==
+Lead -> Develop : Review PR
+activate Lead
+Lead -> Lead : Check architecture
+Lead -> Lead : Verify business logic
+alt Approved
+    Lead -> Develop : ✅ Approve PR
+else Changes Requested
+    Lead -> Dev : 📝 Request changes
+    deactivate Lead
+    Dev -> Feature : Address feedback
+    Dev -> Develop : Update PR
+    activate Lead
+    Lead -> Develop : ✅ Approve PR
+end
+deactivate Lead
+
+== Agent Merge ==
+Agent -> Develop : Merge PR (squash)
+Agent -> Feature : Delete branch
+Agent -> Agent : Update release notes
+Agent -> Notify : Notify team
+deactivate Dev
+
+== Release Cycle (Weekly) ==
+Lead -> Agent : Trigger release
+activate Lead
+Agent -> Release : Create release branch
+Agent -> Agent : Compile changelog
+Agent -> Agent : Bump version
+Agent -> Lead : 📋 Release ready for review
+
+Lead -> Release : Review release
+Lead -> Agent : ✅ Approve release
+
+Agent -> Main : Merge to main
+Agent -> Main : Create tag
+Agent -> Agent : Deploy to production
+Agent -> Notify : 🚀 Release deployed
+deactivate Lead
+deactivate Agent
+
+note right of Agent
+  **Agent Responsibilities**
+  - Run all CI checks
+  - Generate summaries
+  - Apply auto-fixes
+  - Manage merges
+  - Update documentation
+  - Send notifications
+end note
+
+note right of Lead
+  **Human Responsibilities**
+  - Architecture decisions
+  - Business logic review
+  - Release approval
+  - Priority decisions
+end note
+
+@enduml

@@ -1,0 +1,92 @@
+name: Agentic Deploy
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  deployments: write
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    outputs:
+      should_deploy: ${{ steps.check.outputs.deploy }}
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Validate changes
+        id: check
+        run: |
+          # Check what changed
+          CHANGED=$(git diff --name-only HEAD~1 2>/dev/null || echo "initial")
+          
+          # Skip deploy for docs-only changes
+          if echo "$CHANGED" | grep -qvE '\.(md|txt|puml)$'; then
+            echo "deploy=true" >> $GITHUB_OUTPUT
+            echo "🚀 Code changes detected - will deploy"
+          else
+            echo "deploy=false" >> $GITHUB_OUTPUT
+            echo "📝 Docs-only changes - skipping deploy"
+          fi
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: validate
+    if: needs.validate.outputs.should_deploy == 'true'
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Deploy
+        run: |
+          echo "🤖 Agentic deploy started at $(date)"
+          echo "Commit: ${{ github.sha }}"
+          # Your deploy commands here
+          echo "✅ Deploy complete"
+
+      - name: Notify
+        if: always()
+        run: |
+          if [ "${{ job.status }}" == "success" ]; then
+            echo "✅ Deploy succeeded"
+          else
+            echo "❌ Deploy failed - triggering self-heal"
+            # In production: trigger rollback workflow
+          fi
+
+  self-heal:
+    runs-on: ubuntu-latest
+    needs: deploy
+    if: failure()
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      
+      - name: Rollback
+        run: |
+          echo "🔄 Self-healing: rolling back to previous commit"
+          PREV_COMMIT=$(git rev-parse HEAD~1)
+          echo "Rolling back to: $PREV_COMMIT"
+          # git revert --no-commit HEAD
+          # git commit -m "🤖 Auto-rollback: reverting failed deploy"
+          # git push
+
+      - name: Create incident
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `🤖 Auto-rollback triggered: ${context.sha.slice(0,7)}`,
+              body: `## Incident Report\n\n` +
+                    `**Commit:** ${context.sha}\n` +
+                    `**Time:** ${new Date().toISOString()}\n` +
+                    `**Action:** Automatic rollback executed\n\n` +
+                    `Please investigate the failed deployment.`,
+              labels: ['incident', 'automated']
+            });

@@ -1,0 +1,59 @@
+@startuml
+!theme plain
+skinparam backgroundColor white
+skinparam defaultFontName Arial
+skinparam defaultFontSize 14
+
+title Git Workflow Comparison: Complexity vs Automation
+
+skinparam rectangle {
+    BackgroundColor<<simple>> #E8F5E9
+    BackgroundColor<<team>> #FFF3E0
+    BackgroundColor<<full>> #E3F2FD
+    BorderColor #666666
+    RoundCorner 15
+}
+
+rectangle "**SIMPLIFIED GITFLOW**\n\n🔧 Manual\n⏱️ Setup: 1 hour\n📊 Automation: 20%" as simple <<simple>> {
+    rectangle "Human reviews" as s1 #C8E6C9
+    rectangle "Human merges" as s2 #C8E6C9
+    rectangle "Human deploys" as s3 #C8E6C9
+}
+
+rectangle "**AGENTIC TEAM FLOW**\n\n🤝 Hybrid\n⏱️ Setup: 1 day\n📊 Automation: 70%" as team <<team>> {
+    rectangle "AI reviews code" as t1 #FFE0B2
+    rectangle "Human approves" as t2 #FFE0B2
+    rectangle "AI deploys" as t3 #FFE0B2
+}
+
+rectangle "**AGENTIC CI/CD**\n\n🤖 Fully Automated\n⏱️ Setup: 1 week\n📊 Automation: 95%" as full <<full>> {
+    rectangle "AI reviews" as f1 #BBDEFB
+    rectangle "AI merges" as f2 #BBDEFB
+    rectangle "AI deploys + fixes" as f3 #BBDEFB
+}
+
+simple -[hidden]right-> team
+team -[hidden]right-> full
+
+note bottom of simple
+  **Best for:**
+  Small teams
+  Learning git
+  Risk-averse orgs
+end note
+
+note bottom of team
+  **Best for:**
+  Growing teams
+  Compliance needs
+  Gradual adoption
+end note
+
+note bottom of full
+  **Best for:**
+  High velocity
+  Mature testing
+  Continuous deploy
+end note
+
+@enduml
