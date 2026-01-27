@@ -1,3 +1,8 @@
+---
+layout: default
+title: LLM Tool Call Pattern
+---
+
 # LLM Tool Call Pattern
 
 The Tool Call pattern (also known as Function Calling) enables Large Language Models to interact with external systems, APIs, and data sources by invoking predefined tools during a conversation.
@@ -220,3 +225,4 @@ deactivate App
 
 @enduml
 ```
+

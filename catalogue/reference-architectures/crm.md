@@ -1,3 +1,8 @@
+---
+layout: default
+title: CRM Entity-Relationship Model
+---
+
 # CRM Entity-Relationship Model
 
 Customer Relationship Management (CRM) systems are crucial for managing an 

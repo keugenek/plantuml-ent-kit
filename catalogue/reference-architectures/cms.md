@@ -1,3 +1,8 @@
+---
+layout: default
+title: CMS Entity-Relationship Model
+---
+
 # Content Management System (CMS) Reference Architecture
 
 The Content Management System (CMS) serves as a platform to facilitate content creation, organization, publishing, and user engagement. This reference architecture demonstrates the key entities and relationships inherent in a typical CMS.

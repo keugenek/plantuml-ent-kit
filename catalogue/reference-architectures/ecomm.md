@@ -1,3 +1,8 @@
+---
+layout: default
+title: E-Commerce Entity-Relationship Model
+---
+
 # E-Commerce System Reference Architecture
 
 The E-Commerce system is a quintessential online retail platform that facilitates the buying and selling of products. This reference architecture demonstrates key aspects such as inventory management, online transactions, user authentication, and digital marketing.

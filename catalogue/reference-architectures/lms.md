@@ -1,3 +1,8 @@
+---
+layout: default
+title: LMS Entity-Relationship Model
+---
+
 # Learning Management System (LMS) Reference Architecture
 
 The Learning Management System (LMS) serves as a platform to facilitate online education, manage content, engage students, and track performance. This reference architecture demonstrates the key entities and relationships inherent in a typical LMS.

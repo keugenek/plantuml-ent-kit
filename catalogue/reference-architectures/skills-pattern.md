@@ -1,3 +1,8 @@
+---
+layout: default
+title: Skills Pattern
+---
+
 # Skills Pattern - Composable Agent Capabilities
 
 The Skills Pattern organizes agent capabilities into self-contained, reusable modules that can be composed to handle complex tasks.
@@ -149,3 +154,4 @@ Skills can be composed in several ways:
 | [MCP Architecture](mcp-architecture.md) | Skills can be exposed via MCP |
 | [Agent Orchestration](agent-orchestration.md) | Orchestrator selects skills |
 | [Tool Chaining](tool-chaining.md) | Skills may chain tools |
+

@@ -1,3 +1,8 @@
+---
+layout: default
+title: LLM Context Management
+---
+
 # LLM Context Management Principles
 
 A comprehensive index of techniques to prevent context pollution and optimize LLM agent performance.
@@ -220,3 +225,4 @@ Hierarchical memory
 - [Google: Multi-Agent Framework Architecture](https://developers.googleblog.com/architecting-efficient-context-aware-multi-agent-framework-for-production/)
 - [Agenta: Top Techniques to Manage Context Length](https://agenta.ai/blog/top-6-techniques-to-manage-context-length-in-llms)
 - [Claude Developer Platform: Context Management](https://claude.com/blog/context-management)
+

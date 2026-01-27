@@ -1,3 +1,8 @@
+---
+layout: default
+title: Tool Chaining Pattern
+---
+
 # Tool Chaining Pattern - Sequential Tool Execution
 
 The Tool Chaining pattern enables LLMs to execute multiple tools in sequence, where each tool's output becomes input for subsequent tools.
@@ -163,3 +168,4 @@ Tool A → [condition] → Tool B (if true)
 | [LLM Tool Call](llm-tool-call.md) | Single tool calls compose into chains |
 | [Skills Pattern](skills-pattern.md) | Skills may use tool chains internally |
 | [Agent Orchestration](agent-orchestration.md) | Agents execute tool chains |
+

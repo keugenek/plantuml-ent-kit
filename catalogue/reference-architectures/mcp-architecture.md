@@ -1,3 +1,8 @@
+---
+layout: default
+title: Model Context Protocol (MCP)
+---
+
 # Model Context Protocol (MCP) Architecture
 
 The Model Context Protocol (MCP) is an open standard that enables AI applications to connect with external data sources and tools through a unified interface.
@@ -117,3 +122,4 @@ MCP provides a standardized way for AI applications (hosts) to communicate with 
 
 - [MCP Specification](https://modelcontextprotocol.io)
 - [MCP SDKs](https://github.com/modelcontextprotocol)
+

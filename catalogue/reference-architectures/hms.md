@@ -1,3 +1,8 @@
+---
+layout: default
+title: HMS Entity-Relationship Model
+---
+
 # Healthcare Management System Reference Architecture
 
 The Healthcare Management System serves as a platform to facilitate patient care, appointment scheduling, and medical billing. This reference architecture demonstrates the key entities and relationships inherent in a typical Healthcare Management System.
@@ -83,3 +88,4 @@ Billing -- Insurance : covered by
 - A Billing record is associated with a Patient and an Insurance.
 
 This simplified Healthcare Management System model serves as a basis for understanding the relationships and interactions within a healthcare setting. It can be further expanded or modified to meet the specific needs of different healthcare institutions.
+

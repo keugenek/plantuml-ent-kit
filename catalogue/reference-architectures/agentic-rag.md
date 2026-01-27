@@ -1,3 +1,8 @@
+---
+layout: default
+title: Agentic RAG Pattern
+---
+
 # Agentic RAG Reference Architecture
 
 The Agentic Retrieval Augmented Generation (RAG) is an AI model that combines a retrieval system with a language model to generate coherent and relevant responses based on retrieved knowledge. This reference architecture outlines the key components and their interactions within an Agentic RAG system.
@@ -71,3 +76,4 @@ Generator -> User : Generated response
 The Document Encoder is used offline to pre-process and encode the documents in the knowledge base, generating the document embeddings that are stored along with the associated metadata.
 
 This Agentic RAG architecture enables the system to leverage external knowledge from the knowledge base to generate informative and contextually relevant responses to user queries. The retrieval component allows the model to access relevant information, while the generation component ensures the coherence and fluency of the generated response.
+

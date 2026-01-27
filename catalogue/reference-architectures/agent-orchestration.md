@@ -1,3 +1,8 @@
+---
+layout: default
+title: Agent Orchestration Pattern
+---
+
 # Multi-Agent Orchestration Pattern
 
 The Agent Orchestration pattern coordinates multiple specialized agents to collaboratively complete complex tasks that exceed the capabilities of a single agent.
@@ -148,3 +153,4 @@ Agent A ←→ Agent B ←→ Agent C
 | [LLM Tool Call](llm-tool-call.md) | Agents use tools |
 | [Skills Pattern](skills-pattern.md) | Agents may have skills |
 | [Tool Chaining](tool-chaining.md) | Executors chain tools |
+
