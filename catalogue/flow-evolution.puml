@@ -1,0 +1,91 @@
+@startuml flow-evolution
+!theme plain
+skinparam backgroundColor white
+skinparam defaultFontName Arial
+skinparam defaultFontSize 12
+
+title The Evolution of Development Workflows
+
+skinparam rectangle {
+    RoundCorner 15
+}
+
+rectangle "**1. TRADITIONAL FLOW**" as trad #FFECEC {
+    rectangle "👨‍💻 Developer" as td1 #FFF
+    rectangle "📝 Write Code" as td2 #FFF
+    rectangle "⏳ Wait for Review\n(2-24 hours)" as td3 #FFD0D0
+    rectangle "💬 Address Comments" as td4 #FFF
+    rectangle "✅ Get Approval" as td5 #FFF
+    rectangle "🔀 Manual Merge" as td6 #FFF
+    rectangle "🚀 Manual Deploy" as td7 #FFF
+    rectangle "👀 Monitor" as td8 #FFF
+    rectangle "🚨 3am Alert?" as td9 #FFB0B0
+    
+    td1 --> td2
+    td2 --> td3
+    td3 --> td4
+    td4 --> td5
+    td5 --> td6
+    td6 --> td7
+    td7 --> td8
+    td8 --> td9
+}
+
+rectangle "**2. AGENTIC TEAM FLOW**" as team #FFF5E0 {
+    rectangle "👨‍💻 Developer" as at1 #FFF
+    rectangle "📝 Write Code" as at2 #FFF
+    rectangle "🤖 AI Reviews\n(30 seconds)" as at3 #FFE4B0
+    rectangle "👤 Human Approves" as at4 #FFF
+    rectangle "🤖 Auto-merge" as at5 #FFE4B0
+    rectangle "🤖 Auto-deploy" as at6 #FFE4B0
+    rectangle "🤖 Auto-rollback\nif needed" as at7 #FFE4B0
+    
+    at1 --> at2
+    at2 --> at3
+    at3 --> at4
+    at4 --> at5
+    at5 --> at6
+    at6 --> at7
+}
+
+rectangle "**3. FULL AGENTIC FLOW**" as agentic #E8F5E9 {
+    rectangle "👨‍💻 Developer" as fa1 #FFF
+    rectangle "💭 Describe Intent" as fa2 #FFF
+    rectangle "🤖 Agent Writes Code" as fa3 #C8E6C9
+    rectangle "🤖 Agent Reviews" as fa4 #C8E6C9
+    rectangle "🤖 Agent Merges" as fa5 #C8E6C9
+    rectangle "🤖 Agent Deploys" as fa6 #C8E6C9
+    rectangle "🤖 Agent Self-heals" as fa7 #A5D6A7
+    rectangle "😴 Human Sleeps" as fa8 #81C784
+    
+    fa1 --> fa2
+    fa2 --> fa3
+    fa3 --> fa4
+    fa4 --> fa5
+    fa5 --> fa6
+    fa6 --> fa7
+    fa7 --> fa8
+}
+
+trad -[hidden]right-> team
+team -[hidden]right-> agentic
+
+note bottom of trad
+  **Human Hours:** 4-8h
+  **Lead Time:** Days
+  **Risk:** Human error
+end note
+
+note bottom of team
+  **Human Hours:** 1-2h
+  **Lead Time:** Hours
+  **Risk:** Balanced
+end note
+
+note bottom of agentic
+  **Human Hours:** 0-1h
+  **Lead Time:** Minutes
+  **Risk:** Test-dependent
+end note
+
+@enduml

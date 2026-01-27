@@ -1,0 +1,80 @@
+@startuml paradigm-shifts
+!theme plain
+skinparam backgroundColor white
+skinparam defaultFontName Arial
+skinparam defaultFontSize 13
+
+title Three Paradigm Shifts Happening Now
+
+skinparam rectangle {
+    RoundCorner 20
+    shadowing true
+}
+
+together {
+    rectangle "**🔧 PROCESSES**" as proc #E3F2FD {
+        rectangle "Before" as p1 #BBDEFB {
+            rectangle "Sequential reviews" as p1a #FFF
+            rectangle "Manual gates" as p1b #FFF
+            rectangle "Scheduled deploys" as p1c #FFF
+        }
+        rectangle "After" as p2 #64B5F6 {
+            rectangle "Parallel AI review" as p2a #FFF
+            rectangle "Automated gates" as p2b #FFF
+            rectangle "Continuous deploy" as p2c #FFF
+        }
+        p1 -[#1976D2,bold]-> p2
+    }
+}
+
+together {
+    rectangle "**🛠️ TOOLS**" as tools #FFF3E0 {
+        rectangle "Before" as t1 #FFE0B2 {
+            rectangle "PRs for humans" as t1a #FFF
+            rectangle "CI as validator" as t1b #FFF
+            rectangle "Alerts → humans" as t1c #FFF
+        }
+        rectangle "After" as t2 #FFB74D {
+            rectangle "PRs for agents" as t2a #FFF
+            rectangle "CI as executor" as t2b #FFF
+            rectangle "Alerts → agents" as t2c #FFF
+        }
+        t1 -[#F57C00,bold]-> t2
+    }
+}
+
+together {
+    rectangle "**👥 TEAMS**" as teams #F3E5F5 {
+        rectangle "Before" as te1 #E1BEE7 {
+            rectangle "Devs write code" as te1a #FFF
+            rectangle "Reviewers review" as te1b #FFF
+            rectangle "Ops deploy" as te1c #FFF
+        }
+        rectangle "After" as te2 #BA68C8 {
+            rectangle "Devs define intent" as te2a #FFF
+            rectangle "Agents execute" as te2b #FFF
+            rectangle "Humans supervise" as te2c #FFF
+        }
+        te1 -[#7B1FA2,bold]-> te2
+    }
+}
+
+proc -[hidden]right-> tools
+tools -[hidden]right-> teams
+
+note bottom of proc
+  **Velocity**
+  Days → Minutes
+end note
+
+note bottom of tools  
+  **Automation**
+  20% → 95%
+end note
+
+note bottom of teams
+  **Role**
+  Executor → Supervisor
+end note
+
+@enduml

@@ -1,0 +1,47 @@
+@startuml dora-comparison
+!theme plain
+skinparam backgroundColor white
+skinparam defaultFontName Arial
+skinparam defaultFontSize 13
+
+title DORA Metrics: Traditional vs Agentic CI/CD
+
+skinparam rectangle {
+    RoundCorner 10
+}
+
+together {
+    rectangle "**BEFORE: Traditional Flow**" as before #FFE0E0 {
+        rectangle "Deployment Frequency\n**Weekly**\n(Low Performer)" as df1 #FFF
+        rectangle "Lead Time\n**Days to Weeks**\n(Low Performer)" as lt1 #FFF
+        rectangle "Change Failure Rate\n**15-30%**\n(Medium)" as cfr1 #FFF
+        rectangle "MTTR\n**Hours to Days**\n(Low Performer)" as mttr1 #FFF
+    }
+}
+
+together {
+    rectangle "**AFTER: Agentic Flow**" as after #E0FFE0 {
+        rectangle "Deployment Frequency\n**Multiple/Hour**\n(Elite)" as df2 #B0FFB0
+        rectangle "Lead Time\n**Minutes**\n(Elite)" as lt2 #B0FFB0
+        rectangle "Change Failure Rate\n**<15%**\n(Elite)" as cfr2 #B0FFB0
+        rectangle "MTTR\n**Instant**\n(Elite)" as mttr2 #B0FFB0
+    }
+}
+
+before -[hidden]down-> after
+
+df1 -[#FF6666,bold]-> df2 : <color:green>**50x faster**
+lt1 -[#FF6666,bold]-> lt2 : <color:green>**100x faster**
+cfr1 -[#FF6666,bold]-> cfr2 : <color:green>**same/better**
+mttr1 -[#FF6666,bold]-> mttr2 : <color:green>**instant**
+
+note right of after
+  **Real data from**
+  **github.com/keugenek/plantuml-ent-kit**
+  
+  22 commits in 1 day
+  0 written by human
+  Agent self-heals failures
+end note
+
+@enduml
