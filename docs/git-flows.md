@@ -4,12 +4,12 @@ This document describes three branching strategies for PlantUML Entity Kit devel
 
 ## Overview
 
-![Git Workflows Diagram](images/git-flows.png)
+> **[View Diagram](http://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/keugenek/plantuml-ent-kit/main/docs/uml/git-flows.puml)** | **[Source](uml/git-flows.puml)**
 
 | Flow | Automation | Team Size | Best For |
 |------|------------|-----------|----------|
 | **Agentic Git Flows** | 100% | Any | AI-driven continuous deployment |
-| **Agentic Team Flow** | 80% | 3-10 | Human + AI collaboration |
+| **Agentic Team Flow** | ~80% | 3-10 | Human + AI collaboration |
 | **Simplified GitFlow** | Manual | 2-5 | Small teams, fixed release cycles |
 
 ---
@@ -30,8 +30,9 @@ Designed for AI agents to autonomously manage feature development, testing, and 
 
 ```
 main (production)
-  └── release/* (release candidates)
-        └── feature/* (agent-driven development)
+ └─ release/* (release candidates)
+     └─ feature/* (agent-driven development)
+         └─ task/* (micro-tasks)
 ```
 
 ### Workflow
@@ -59,16 +60,10 @@ Hybrid workflow: humans decide, agents execute.
 ### Workflow
 
 ```
-┌─────────────┐     ┌─────────────┐     ┌─────────────┐
-│   Human     │────>│   Agent     │────>│   Human     │
-│ Creates PR  │     │ Runs Checks │     │  Approves   │
-└─────────────┘     └─────────────┘     └─────────────┘
-                           │
-                           v
-                    ┌─────────────┐     ┌─────────────┐
-                    │   Agent     │────>│   Agent     │
-                    │   Merges    │     │  Deploys    │
-                    └─────────────┘     └─────────────┘
+Human Creates PR ──> Agent Runs Checks ──> Human Approves
+                            │
+                            ▼
+                     Agent Merges ──> Agent Deploys
 ```
 
 ### Steps
@@ -104,7 +99,7 @@ git checkout -b feature/add-login develop
 
 # Make changes and commit
 git add .
-git commit -m "Add login feature"
+git commit -m "feat: add login feature"
 
 # Push and create PR
 git push -u origin feature/add-login
@@ -115,21 +110,23 @@ git merge --no-ff feature/add-login
 git branch -d feature/add-login
 ```
 
-### Advantages
+### Pros & Cons
 
-- Simple to understand
-- Works well for small teams (2-5)
-- Produces stable releases
-- Clear separation of concerns
-- Minimal tooling required
+| Advantages | Disadvantages |
+|------------|---------------|
+| Simple to understand | No continuous deployment |
+| Works for small teams | Manual process |
+| Stable releases | Many merge operations |
+| Clear separation | Doesn't scale well |
+| Minimal tooling | Feature freeze needed |
 
 ---
 
 ## Comparison Matrix
 
-| Aspect | Agentic | Team | Simple |
-|--------|---------|------|--------|
-| **Automation** | 100% | 80% | 0% |
+| Aspect | Agentic Flows | Team Flow | Simplified |
+|--------|---------------|-----------|------------|
+| **Automation** | 100% | ~80% | 0% |
 | **Team Size** | Any | 3-10 | 2-5 |
 | **Release Cadence** | Continuous | Weekly | Monthly |
 | **Complexity** | High | Medium | Low |
@@ -139,21 +136,21 @@ git branch -d feature/add-login
 
 ---
 
-## Choosing Your Flow
+## Decision Guide
 
-### Use Agentic Git Flows when:
+### Choose Agentic Git Flows when:
 - Building AI-first development pipelines
 - Need continuous deployment with minimal intervention
 - Have robust testing infrastructure
 - Trust automated decision-making
 
-### Use Agentic Team Flow when:
+### Choose Agentic Team Flow when:
 - Want AI assistance with human control
 - Weekly release cycles work for your team
 - Need audit trails and approval workflows
 - Balancing speed with oversight
 
-### Use Simplified GitFlow when:
+### Choose Simplified GitFlow when:
 - Small team (2-5 developers)
 - Monthly or scheduled releases
 - Simple projects without complex CI/CD
@@ -161,11 +158,13 @@ git branch -d feature/add-login
 
 ---
 
-## PlantUML Source
+## Resources
 
-See [uml/git-flows.puml](uml/git-flows.puml) for the diagram source.
+- **Diagram Source:** [uml/git-flows.puml](uml/git-flows.puml)
+- [Git Flow (nvie.com)](https://nvie.com/posts/a-successful-git-branching-model/)
+- [GitHub Flow](https://guides.github.com/introduction/flow/)
+- [Trunk-Based Development](https://trunkbaseddevelopment.com/)
 
 ---
 
-**Last Updated:** 2026-01-27
-**Status:** Approved for PlantUML Entity Kit team
+*Last Updated: 2026-01-27 · Status: Approved*
