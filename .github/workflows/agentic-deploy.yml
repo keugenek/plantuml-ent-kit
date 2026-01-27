@@ -2,12 +2,13 @@ name: Agentic Deploy
 
 on:
   push:
-    branches: [master]
+    branches: [main]
   workflow_dispatch:
 
 permissions:
   contents: write
-  deployments: write
+  issues: write
+  actions: write
 
 jobs:
   validate:
@@ -16,19 +17,22 @@ jobs:
       should_deploy: ${{ steps.check.outputs.deploy }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
       
       - name: Validate changes
         id: check
         run: |
           # Check what changed
           CHANGED=$(git diff --name-only HEAD~1 2>/dev/null || echo "initial")
+          echo "Changed files: $CHANGED"
           
           # Skip deploy for docs-only changes
           if echo "$CHANGED" | grep -qvE '\.(md|txt|puml)$'; then
             echo "deploy=true" >> $GITHUB_OUTPUT
             echo "🚀 Code changes detected - will deploy"
           else
-            echo "deploy=false" >> $GITHUB_OUTPUT
+            echo "deploy=false" >> $GITHUB_OUTPUT  
             echo "📝 Docs-only changes - skipping deploy"
           fi
 
@@ -36,57 +40,109 @@ jobs:
     runs-on: ubuntu-latest
     needs: validate
     if: needs.validate.outputs.should_deploy == 'true'
-    environment: production
+    outputs:
+      status: ${{ steps.deploy.outcome }}
     steps:
       - uses: actions/checkout@v4
       
       - name: Deploy
+        id: deploy
+        continue-on-error: true
         run: |
           echo "🤖 Agentic deploy started at $(date)"
           echo "Commit: ${{ github.sha }}"
-          # Your deploy commands here
+          
+          # Simulate deployment (replace with actual deploy)
+          # Example: npm run build && npm run deploy
           echo "✅ Deploy complete"
 
-      - name: Notify
-        if: always()
+      - name: Check deploy result
+        if: steps.deploy.outcome == 'failure'
         run: |
-          if [ "${{ job.status }}" == "success" ]; then
-            echo "✅ Deploy succeeded"
-          else
-            echo "❌ Deploy failed - triggering self-heal"
-            # In production: trigger rollback workflow
-          fi
+          echo "❌ Deploy failed!"
+          exit 1
 
   self-heal:
     runs-on: ubuntu-latest
     needs: deploy
-    if: failure()
+    if: always() && needs.deploy.result == 'failure'
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 2
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
       
-      - name: Rollback
+      - name: Analyze failure
+        id: analyze
         run: |
-          echo "🔄 Self-healing: rolling back to previous commit"
-          PREV_COMMIT=$(git rev-parse HEAD~1)
-          echo "Rolling back to: $PREV_COMMIT"
-          # git revert --no-commit HEAD
-          # git commit -m "🤖 Auto-rollback: reverting failed deploy"
-          # git push
+          echo "🔍 Analyzing failure..."
+          echo "Failed commit: ${{ github.sha }}"
+          
+          # Get error logs from previous job
+          echo "Checking for common issues..."
+          
+          # Check if it's a config issue vs code issue
+          CHANGED=$(git diff --name-only HEAD~1 2>/dev/null || echo "")
+          if echo "$CHANGED" | grep -q "\.yml$\|\.yaml$\|\.json$"; then
+            echo "type=config" >> $GITHUB_OUTPUT
+            echo "⚙️ Config change detected - may need manual review"
+          else
+            echo "type=code" >> $GITHUB_OUTPUT
+            echo "💻 Code change - attempting auto-rollback"
+          fi
 
-      - name: Create incident
+      - name: Auto-rollback (code issues)
+        if: steps.analyze.outputs.type == 'code'
+        run: |
+          echo "🔄 Self-healing: creating revert commit"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          
+          PREV_SHA=$(git rev-parse HEAD~1)
+          echo "Reverting to: $PREV_SHA"
+          
+          # Create revert
+          git revert --no-commit HEAD
+          git commit -m "🤖 Auto-rollback: reverting ${{ github.sha }}"
+          git push origin main
+
+      - name: Create incident issue
         uses: actions/github-script@v7
         with:
           script: |
+            const failureType = '${{ steps.analyze.outputs.type }}';
+            const isAutoRolled = failureType === 'code';
+            
+            const body = `## 🚨 Incident Report
+            
+**Commit:** \`${{ github.sha }}\`
+**Time:** ${new Date().toISOString()}
+**Failure Type:** ${failureType === 'config' ? 'Configuration' : 'Code'}
+**Auto-rollback:** ${isAutoRolled ? '✅ Executed' : '❌ Skipped (config change)'}
+
+### Action Required
+${isAutoRolled 
+  ? 'System auto-recovered. Please investigate root cause.'
+  : '⚠️ Manual intervention required. Config changes need human review.'}
+
+### Failed Workflow
+[View logs](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
+`;
+
             await github.rest.issues.create({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              title: `🤖 Auto-rollback triggered: ${context.sha.slice(0,7)}`,
-              body: `## Incident Report\n\n` +
-                    `**Commit:** ${context.sha}\n` +
-                    `**Time:** ${new Date().toISOString()}\n` +
-                    `**Action:** Automatic rollback executed\n\n` +
-                    `Please investigate the failed deployment.`,
-              labels: ['incident', 'automated']
+              title: \`🤖 Deploy failed: \${context.sha.slice(0,7)} [\${failureType}]\`,
+              body: body,
+              labels: ['incident', 'automated', failureType]
             });
+
+  notify-success:
+    runs-on: ubuntu-latest
+    needs: deploy
+    if: needs.deploy.result == 'success'
+    steps:
+      - name: Log success
+        run: |
+          echo "✅ Deploy succeeded for ${{ github.sha }}"
+          echo "No incidents. System healthy."

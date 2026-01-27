@@ -11,6 +11,9 @@ permissions:
 jobs:
   ai-review:
     runs-on: ubuntu-latest
+    outputs:
+      issues_found: ${{ steps.review.outputs.issues_found }}
+      auto_merge_eligible: ${{ steps.review.outputs.auto_merge }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -20,79 +23,169 @@ jobs:
         id: diff
         run: |
           git diff origin/${{ github.base_ref }}...HEAD > changes.diff
-          echo "DIFF<<EOF" >> $GITHUB_OUTPUT
-          head -c 10000 changes.diff >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
+          echo "Diff size: $(wc -l < changes.diff) lines"
+          
+          # Store diff for analysis (truncate if huge)
+          head -c 50000 changes.diff > truncated.diff
 
       - name: AI Review
+        id: review
         uses: actions/github-script@v7
         with:
           script: |
-            const diff = `${{ steps.diff.outputs.DIFF }}`;
+            const fs = require('fs');
+            const diff = fs.readFileSync('truncated.diff', 'utf8');
             
-            // Simple heuristic review (replace with LLM API call)
             const issues = [];
+            const warnings = [];
             const lines = diff.split('\n');
             
-            for (let i = 0; i < lines.length; i++) {
-              const line = lines[i];
+            let currentFile = '';
+            let lineNum = 0;
+            
+            for (const line of lines) {
+              // Track current file
+              if (line.startsWith('+++ b/')) {
+                currentFile = line.replace('+++ b/', '');
+                lineNum = 0;
+              }
+              
               if (line.startsWith('+') && !line.startsWith('+++')) {
-                // Check for common issues
-                if (line.includes('console.log') && !line.includes('// debug')) {
-                  issues.push(`Line ${i}: Consider removing console.log or marking as // debug`);
+                lineNum++;
+                const content = line.slice(1);
+                
+                // Security checks
+                if (/password\s*=\s*['"][^'"]+['"]/i.test(content)) {
+                  issues.push(`🔴 **SECURITY**: Hardcoded password in \`${currentFile}\``);
                 }
-                if (line.includes('TODO') || line.includes('FIXME')) {
-                  issues.push(`Line ${i}: Found TODO/FIXME - ensure tracked in issues`);
+                if (/api[_-]?key\s*=\s*['"][^'"]+['"]/i.test(content)) {
+                  issues.push(`🔴 **SECURITY**: Hardcoded API key in \`${currentFile}\``);
                 }
-                if (line.includes('password') || line.includes('secret') || line.includes('api_key')) {
-                  issues.push(`Line ${i}: ⚠️ Potential secret in code - verify not hardcoded`);
+                if (/secret\s*=\s*['"][^'"]+['"]/i.test(content)) {
+                  issues.push(`🔴 **SECURITY**: Hardcoded secret in \`${currentFile}\``);
+                }
+                
+                // Code quality
+                if (/console\.log\(/.test(content) && !/\/\/\s*(debug|TODO)/i.test(content)) {
+                  warnings.push(`⚠️ Debug code: \`console.log\` in \`${currentFile}\``);
+                }
+                if (/TODO|FIXME|HACK|XXX/.test(content)) {
+                  warnings.push(`📝 Found TODO/FIXME in \`${currentFile}\` - ensure tracked`);
+                }
+                
+                // Config issues
+                if (currentFile.endsWith('.yml') || currentFile.endsWith('.yaml')) {
+                  if (/^\s+/.test(content) && /\t/.test(content)) {
+                    warnings.push(`⚠️ Mixed tabs/spaces in YAML: \`${currentFile}\``);
+                  }
                 }
               }
             }
-
+            
+            // Build review comment
             let body = '## 🤖 Agentic Code Review\n\n';
             
-            if (issues.length === 0) {
-              body += '✅ No issues found. LGTM!\n\n';
-              body += '**Auto-merge eligible**: Yes (pending CI checks)';
-            } else {
-              body += '### Issues Found:\n\n';
-              issues.forEach(issue => {
-                body += `- ${issue}\n`;
-              });
-              body += '\n**Auto-merge eligible**: No (issues require human review)';
+            const hasBlockers = issues.length > 0;
+            const hasWarnings = warnings.length > 0;
+            
+            if (hasBlockers) {
+              body += '### 🚫 Blocking Issues\n\n';
+              issues.forEach(i => body += `- ${i}\n`);
+              body += '\n';
             }
             
-            body += '\n\n---\n*Reviewed by Agentic CI/CD Pipeline*';
-
+            if (hasWarnings) {
+              body += '### ⚠️ Warnings\n\n';
+              warnings.slice(0, 10).forEach(w => body += `- ${w}\n`);
+              if (warnings.length > 10) {
+                body += `- ... and ${warnings.length - 10} more\n`;
+              }
+              body += '\n';
+            }
+            
+            if (!hasBlockers && !hasWarnings) {
+              body += '✅ **No issues found. LGTM!**\n\n';
+            }
+            
+            // Auto-merge eligibility
+            const prAuthor = context.payload.pull_request.user.login;
+            const isTrusted = ['dependabot[bot]', 'renovate[bot]'].includes(prAuthor) ||
+                             context.payload.pull_request.labels?.some(l => l.name === 'auto-merge');
+            
+            const canAutoMerge = !hasBlockers && isTrusted;
+            
+            body += '---\n';
+            body += `**Auto-merge eligible:** ${canAutoMerge ? '✅ Yes' : '❌ No'}`;
+            if (!canAutoMerge) {
+              if (hasBlockers) body += ' (blocking issues found)';
+              else if (!isTrusted) body += ' (requires trusted author or auto-merge label)';
+            }
+            body += '\n\n*Reviewed by Agentic CI/CD Pipeline*';
+            
+            // Post comment
             await github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: context.issue.number,
               body: body
             });
+            
+            // Set outputs
+            core.setOutput('issues_found', hasBlockers ? 'true' : 'false');
+            core.setOutput('auto_merge', canAutoMerge ? 'true' : 'false');
+            
+            // Fail if blocking issues
+            if (hasBlockers) {
+              core.setFailed('Blocking security issues found');
+            }
 
   auto-merge:
     runs-on: ubuntu-latest
     needs: ai-review
-    if: github.event.pull_request.user.login == 'dependabot[bot]' || contains(github.event.pull_request.labels.*.name, 'auto-merge')
+    if: needs.ai-review.outputs.auto_merge_eligible == 'true'
     steps:
-      - name: Auto-merge
+      - name: Wait for other checks
+        run: sleep 30
+        
+      - name: Attempt auto-merge
         uses: actions/github-script@v7
         with:
           script: |
-            // Only merge if all checks pass
+            // Check all status checks
             const { data: checks } = await github.rest.checks.listForRef({
               owner: context.repo.owner,
               repo: context.repo.repo,
               ref: context.payload.pull_request.head.sha
             });
             
-            const allPassed = checks.check_runs.every(
-              check => check.conclusion === 'success' || check.status === 'in_progress'
+            const pending = checks.check_runs.filter(c => 
+              c.status !== 'completed' && c.name !== 'auto-merge'
             );
             
-            if (allPassed) {
-              console.log('All checks passed - eligible for auto-merge');
-              // In production: github.rest.pulls.merge(...)
+            if (pending.length > 0) {
+              console.log(`Waiting for ${pending.length} checks to complete`);
+              return;
+            }
+            
+            const failed = checks.check_runs.filter(c => 
+              c.conclusion === 'failure' && c.name !== 'auto-merge'
+            );
+            
+            if (failed.length > 0) {
+              console.log('Some checks failed, skipping auto-merge');
+              return;
+            }
+            
+            console.log('All checks passed - merging');
+            
+            try {
+              await github.rest.pulls.merge({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: context.issue.number,
+                merge_method: 'squash'
+              });
+              console.log('✅ Auto-merged successfully');
+            } catch (e) {
+              console.log('Could not auto-merge:', e.message);
             }
