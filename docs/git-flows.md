@@ -74,35 +74,7 @@ This catalogue describes branching strategies for different team sizes and autom
 
 ## Choosing Your Flow
 
-```
-                    ┌─────────────────────────────────┐
-                    │  Do you have AI agents?         │
-                    └─────────────────────────────────┘
-                                   │
-                    ┌──────────────┴──────────────┐
-                    ▼                             ▼
-                   Yes                           No
-                    │                             │
-        ┌───────────┴───────────┐                 │
-        │ Need human oversight? │                 │
-        └───────────────────────┘                 │
-                    │                             │
-         ┌─────────┴─────────┐                   │
-         ▼                   ▼                   ▼
-        Yes                 No           ┌──────────────┐
-         │                   │           │ Team size?   │
-         │                   │           └──────────────┘
-         ▼                   ▼                   │
-  ┌─────────────┐    ┌─────────────┐    ┌──────┴──────┐
-  │ Team Flow   │    │ Agentic     │    ▼            ▼
-  └─────────────┘    │ Git Flows   │   2-5         >5
-                     └─────────────┘    │            │
-                                        ▼            ▼
-                                 ┌───────────┐  Consider
-                                 │ Simplified │  Team Flow
-                                 │ GitFlow   │  or other
-                                 └───────────┘
-```
+![Choosing Your Flow](https://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/keugenek/plantuml-ent-kit/fix/cleanup-gitflows-doc/docs/uml/choosing-flow.puml)
 
 ## Migration Paths
 
