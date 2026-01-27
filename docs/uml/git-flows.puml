@@ -1,0 +1,77 @@
+@startuml git-flows
+
+title Git Workflows Comparison
+
+skinparam componentStyle rectangle
+skinparam defaultTextAlignment center
+skinparam BackgroundColor #FEFEFE
+
+skinparam rectangle {
+    BackgroundColor<<agentic>> #E8F5E9
+    BorderColor<<agentic>> #2E7D32
+    BackgroundColor<<team>> #E3F2FD
+    BorderColor<<team>> #1565C0
+    BackgroundColor<<simple>> #FFF3E0
+    BorderColor<<simple>> #EF6C00
+    BackgroundColor<<branch>> #F5F5F5
+    BorderColor<<branch>> #757575
+}
+
+' ===== Agentic Git Flows =====
+rectangle "**Agentic Git Flows**\n//100% Automated//" <<agentic>> as agentic {
+    rectangle "main" <<branch>> as a_main
+    rectangle "release/*" <<branch>> as a_release
+    rectangle "feature/*" <<branch>> as a_feature
+
+    a_main <-- a_release : auto-promote
+    a_release <-- a_feature : agent merges
+}
+
+note right of agentic
+  * AI agents manage all workflows
+  * Self-healing on failures
+  * Continuous deployment
+  * Audit trail logged
+end note
+
+' ===== Agentic Team Flow =====
+rectangle "**Agentic Team Flow**\n//Human + AI Collaboration//" <<team>> as team {
+    rectangle "main" <<branch>> as t_main
+    rectangle "develop" <<branch>> as t_develop
+    rectangle "feature/*" <<branch>> as t_feature
+
+    t_main <-- t_develop : team lead release
+    t_develop <-- t_feature : human approves
+}
+
+note right of team
+  * Humans decide, agents execute
+  * Automated testing & checks
+  * Weekly release cadence
+  * Human approval required
+end note
+
+' ===== Simplified GitFlow =====
+rectangle "**Simplified GitFlow**\n//Manual Process//" <<simple>> as simple {
+    rectangle "main" <<branch>> as s_main
+    rectangle "develop" <<branch>> as s_develop
+    rectangle "feature/*" <<branch>> as s_feature
+    rectangle "hotfix/*" <<branch>> as s_hotfix
+
+    s_main <-- s_develop : merge release
+    s_main <-- s_hotfix : emergency fix
+    s_develop <-- s_feature : PR merge
+}
+
+note right of simple
+  * Small teams (2-5)
+  * Monthly releases
+  * Full manual control
+  * No CI/CD required
+end note
+
+' Layout
+agentic -[hidden]down- team
+team -[hidden]down- simple
+
+@enduml
