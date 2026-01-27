@@ -1,0 +1,60 @@
+@startuml flow-comparison
+!theme plain
+skinparam backgroundColor white
+skinparam defaultFontName Arial
+
+title Regular Git Flow vs Agentic CI/CD
+
+skinparam rectangle {
+    RoundCorner 10
+}
+
+rectangle "**REGULAR FLOW**" as reg #FFE0E0 {
+    rectangle "Developer pushes code" as r1 #FFF
+    rectangle "Wait for reviewer (2-24h)" as r2 #FFF
+    rectangle "Back-and-forth comments" as r3 #FFF
+    rectangle "Manual approval" as r4 #FFF
+    rectangle "Manual merge" as r5 #FFF
+    rectangle "Manual deploy" as r6 #FFF
+    rectangle "Monitor for issues" as r7 #FFF
+    rectangle "Wake up at 3am if broken" as r8 #FFB0B0
+    
+    r1 --> r2
+    r2 --> r3
+    r3 --> r4
+    r4 --> r5
+    r5 --> r6
+    r6 --> r7
+    r7 --> r8
+}
+
+rectangle "**AGENTIC FLOW**" as agent #E0FFE0 {
+    rectangle "Developer pushes code" as a1 #FFF
+    rectangle "AI reviews instantly" as a2 #FFF
+    rectangle "Auto-fix suggestions" as a3 #FFF
+    rectangle "Auto-merge if tests pass" as a4 #FFF
+    rectangle "Auto-deploy" as a5 #FFF
+    rectangle "Self-heal on failure" as a6 #B0FFB0
+    rectangle "Sleep through the night" as a7 #B0FFB0
+    
+    a1 --> a2
+    a2 --> a3
+    a3 --> a4
+    a4 --> a5
+    a5 --> a6
+    a6 --> a7
+}
+
+note bottom of reg
+  ⏱️ **Time to deploy:** 1-3 days
+  👤 **Human hours:** 4-8h
+  😰 **Stress level:** High
+end note
+
+note bottom of agent
+  ⏱️ **Time to deploy:** Minutes
+  👤 **Human hours:** 0
+  😴 **Stress level:** Zero
+end note
+
+@enduml
