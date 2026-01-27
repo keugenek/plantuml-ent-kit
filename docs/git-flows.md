@@ -14,7 +14,7 @@ This catalogue describes branching strategies for different team sizes and autom
 
 ## Agentic Git Flows
 
-[![Agentic Git Flows](images/agentic-git-flows.png)](agentic-git-flows.md)
+[![Agentic Git Flows](https://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/keugenek/plantuml-ent-kit/fix/cleanup-gitflows-doc/docs/uml/agentic-git-flows.puml)](agentic-git-flows.md)
 
 **Full automation** — AI agents manage the entire development lifecycle autonomously.
 
@@ -29,7 +29,7 @@ This catalogue describes branching strategies for different team sizes and autom
 
 ## Agentic Team Flow
 
-[![Agentic Team Flow](images/agentic-team-flow.png)](agentic-team-flow.md)
+[![Agentic Team Flow](https://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/keugenek/plantuml-ent-kit/fix/cleanup-gitflows-doc/docs/uml/agentic-team-flow.puml)](agentic-team-flow.md)
 
 **Hybrid workflow** — Humans make decisions, agents execute.
 
@@ -44,7 +44,7 @@ This catalogue describes branching strategies for different team sizes and autom
 
 ## Simplified GitFlow
 
-[![Simplified GitFlow](images/simplified-gitflow.png)](simplified-gitflow.md)
+[![Simplified GitFlow](https://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/keugenek/plantuml-ent-kit/fix/cleanup-gitflows-doc/docs/uml/simplified-gitflow.puml)](simplified-gitflow.md)
 
 **Traditional approach** — Manual branching for small teams.
 
