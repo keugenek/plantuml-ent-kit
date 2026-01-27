@@ -4,7 +4,7 @@ Hybrid workflow combining human decision-making with AI agent execution. Humans 
 
 ## Overview
 
-![Agentic Team Flow](images/agentic-team-flow.png)
+![Agentic Team Flow](https://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/keugenek/plantuml-ent-kit/fix/cleanup-gitflows-doc/docs/uml/agentic-team-flow.puml)
 
 ## Pattern Description
 
