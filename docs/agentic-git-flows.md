@@ -4,7 +4,7 @@ Fully automated branching strategy where AI agents autonomously manage the entir
 
 ## Overview
 
-![Agentic Git Flows](images/agentic-git-flows.png)
+![Agentic Git Flows](https://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/keugenek/plantuml-ent-kit/fix/cleanup-gitflows-doc/docs/uml/agentic-git-flows.puml)
 
 ## Pattern Description
 
