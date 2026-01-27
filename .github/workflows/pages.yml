@@ -41,9 +41,12 @@ jobs:
           mkdir -p /tmp/plantuml
           curl -L -o /tmp/plantuml/plantuml.jar https://github.com/plantuml/plantuml/releases/download/v1.2024.8/plantuml-1.2024.8.jar
 
-      - name: Render all PlantUML diagrams
+      - name: Render changed PlantUML diagrams
         run: |
-          # Find and render all PlantUML files
+          echo "🎨 Checking PlantUML diagrams for changes..."
+          RENDERED=0
+          SKIPPED=0
+
           find . -type f \( -name "*.puml" -o -name "*.pu" -o -name "*.plantuml" \) | while read file; do
             dir=$(dirname "$file")
             filename=$(basename "$file")
@@ -56,10 +59,20 @@ jobs:
               output_dir="$dir/images"
             fi
 
+            png_file="$output_dir/$name.png"
             mkdir -p "$output_dir"
-            echo "Rendering: $file -> $output_dir/$name.png"
+
+            # Skip if PNG exists and is newer than source
+            if [ -f "$png_file" ] && [ "$png_file" -nt "$file" ]; then
+              echo "  ⏭️  Skip (unchanged): $file"
+              continue
+            fi
+
+            echo "  🔄 Rendering: $file"
             java -jar /tmp/plantuml/plantuml.jar -tpng -o "$(realpath "$output_dir")" "$file" || true
           done
+
+          echo "✅ PlantUML rendering complete"
 
       - name: Setup Ruby for Jekyll
         uses: ruby/setup-ruby@v1

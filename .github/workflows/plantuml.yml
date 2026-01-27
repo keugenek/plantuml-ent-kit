@@ -93,16 +93,49 @@ jobs:
           mkdir -p /tmp/plantuml
           curl -L -o /tmp/plantuml/plantuml.jar https://github.com/plantuml/plantuml/releases/download/v1.2024.8/plantuml-1.2024.8.jar
 
-      - name: Render PlantUML files
+      - name: Render changed PlantUML files
         run: |
-          echo "🎨 Rendering PlantUML diagrams..."
+          echo "🎨 Checking for changed PlantUML files..."
 
-          find . -type f \( -name "*.puml" -o -name "*.pu" -o -name "*.plantuml" \) | while read file; do
+          # Get changed files in this push (compare with parent commit)
+          CHANGED_PUML=$(git diff --name-only HEAD~1 HEAD 2>/dev/null | grep -E '\.(puml|pu|plantuml)$' || true)
+
+          if [ -z "$CHANGED_PUML" ]; then
+            # Fallback: render files where PNG is missing or older than source
+            echo "  No git diff available, checking file timestamps..."
+            CHANGED_PUML=$(find . -type f \( -name "*.puml" -o -name "*.pu" -o -name "*.plantuml" \) | while read file; do
+              dir=$(dirname "$file")
+              filename=$(basename "$file")
+              name="${filename%.*}"
+              if [[ "$dir" == *"/uml"* ]]; then
+                output_dir="${dir/\/uml/\/images}"
+              else
+                output_dir="$dir/images"
+              fi
+              png_file="$output_dir/$name.png"
+              if [ ! -f "$png_file" ] || [ "$file" -nt "$png_file" ]; then
+                echo "$file"
+              fi
+            done)
+          fi
+
+          if [ -z "$CHANGED_PUML" ]; then
+            echo "✅ No PlantUML files need rendering"
+            exit 0
+          fi
+
+          echo "📋 Files to render:"
+          echo "$CHANGED_PUML"
+          echo ""
+
+          echo "$CHANGED_PUML" | while read file; do
+            [ -z "$file" ] && continue
+            [ ! -f "$file" ] && continue
+
             dir=$(dirname "$file")
             filename=$(basename "$file")
             name="${filename%.*}"
 
-            # Determine output directory (sibling 'images' folder)
             if [[ "$dir" == *"/uml"* ]]; then
               output_dir="${dir/\/uml/\/images}"
             else
@@ -110,11 +143,7 @@ jobs:
             fi
 
             mkdir -p "$output_dir"
-
-            echo "  Rendering: $file"
-            echo "  Output: $output_dir/$name.png"
-
-            # Render to PNG
+            echo "  🔄 Rendering: $file -> $output_dir/$name.png"
             java -jar /tmp/plantuml/plantuml.jar -tpng -o "$(realpath "$output_dir")" "$file"
 
             if [ -f "$output_dir/$name.png" ]; then
