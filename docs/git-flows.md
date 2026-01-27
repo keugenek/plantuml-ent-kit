@@ -1,3 +1,8 @@
+---
+layout: default
+title: Git Workflows Overview
+---
+
 # Git Workflows & Team Flows
 
 This catalogue describes branching strategies for different team sizes and automation levels.
@@ -104,3 +109,4 @@ All diagrams are maintained as PlantUML files:
 ---
 
 *Last Updated: 2026-01-27*
+

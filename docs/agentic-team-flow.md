@@ -1,3 +1,8 @@
+---
+layout: default
+title: Agentic Team Flow
+---
+
 # Agentic Team Flow
 
 Hybrid workflow combining human decision-making with AI agent execution. Humans control strategy; agents handle operations.
@@ -245,3 +250,4 @@ release:
 ---
 
 **[← Back to Git Flows Overview](git-flows.md)**
+

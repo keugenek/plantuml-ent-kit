@@ -1,3 +1,8 @@
+---
+layout: default
+title: Full Agentic Git Flows
+---
+
 # Agentic Git Flows
 
 Fully automated branching strategy where AI agents autonomously manage the entire development lifecycle.
@@ -164,3 +169,4 @@ Track these KPIs for agentic flows:
 ---
 
 **[← Back to Git Flows Overview](git-flows.md)**
+

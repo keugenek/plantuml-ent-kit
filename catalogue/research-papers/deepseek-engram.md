@@ -1,3 +1,8 @@
+---
+layout: default
+title: DeepSeek Engram - Conditional Memory via N-gram Lookup
+---
+
 # DeepSeek Engram: Conditional Memory via Scalable N-gram Lookup
 
 **Paper**: [Conditional Memory via Scalable Lookup: A New Axis of Sparsity for Large Language Models](https://github.com/deepseek-ai/Engram/blob/main/Engram_paper.pdf)
@@ -119,3 +124,4 @@ python engram_demo_v1.py
 - [DeepSeek Engram GitHub](https://github.com/deepseek-ai/Engram)
 - [Tom's Hardware Coverage](https://www.tomshardware.com/tech-industry/artificial-intelligence/deepseek-touts-memory-breakthrough-engram)
 - [VentureBeat Analysis](https://venturebeat.com/data/deepseeks-conditional-memory-fixes-silent-llm-waste-gpu-cycles-lost-to)
+

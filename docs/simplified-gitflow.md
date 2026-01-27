@@ -1,3 +1,8 @@
+---
+layout: default
+title: Simplified GitFlow
+---
+
 # Simplified GitFlow
 
 Traditional branching model for small teams preferring manual control and predictable releases.
@@ -287,3 +292,4 @@ docs(readme): update installation instructions
 ---
 
 **[← Back to Git Flows Overview](git-flows.md)**
+
