@@ -1,0 +1,127 @@
+@startuml simplified-gitflow
+
+title Simplified GitFlow - Manual Process
+
+skinparam participant {
+    BackgroundColor #FFF3E0
+    BorderColor #EF6C00
+}
+
+skinparam actor {
+    BackgroundColor #FFE0B2
+}
+
+skinparam database {
+    BackgroundColor #E8F5E9
+    BorderColor #4CAF50
+}
+
+actor "Developer" as Dev
+actor "Reviewer" as Rev
+actor "Release Manager" as RM
+database "main" as Main
+database "develop" as Develop
+database "feature/*" as Feature
+database "release/*" as Release
+database "hotfix/*" as Hotfix
+
+== Feature Development ==
+Dev -> Develop : git checkout develop
+Dev -> Feature : git checkout -b feature/xyz
+activate Dev
+
+loop Development
+    Dev -> Feature : Make changes
+    Dev -> Feature : git commit -m "feat: ..."
+end
+
+Dev -> Feature : git push origin feature/xyz
+
+== Code Review ==
+Dev -> Develop : Create Pull Request
+activate Rev
+Rev -> Develop : Review code
+Rev -> Rev : Check quality
+Rev -> Rev : Verify tests
+alt Approved
+    Rev -> Dev : ✅ Approve
+else Changes Needed
+    Rev -> Dev : 📝 Request changes
+    Dev -> Feature : Address feedback
+    Dev -> Develop : Update PR
+end
+deactivate Rev
+
+== Merge to Develop ==
+Dev -> Develop : git merge --no-ff feature/xyz
+Dev -> Feature : git branch -d feature/xyz
+deactivate Dev
+
+== Release Preparation ==
+RM -> Develop : git checkout develop
+activate RM
+RM -> Release : git checkout -b release/1.0.0
+
+loop Release Prep
+    RM -> Release : Fix bugs only
+    RM -> Release : Update version
+    RM -> Release : Update changelog
+end
+
+== Release to Production ==
+RM -> Main : git checkout main
+RM -> Main : git merge --no-ff release/1.0.0
+RM -> Main : git tag -a v1.0.0
+
+RM -> Develop : git checkout develop
+RM -> Develop : git merge --no-ff release/1.0.0
+RM -> Release : git branch -d release/1.0.0
+RM -> Main : git push origin main --tags
+deactivate RM
+
+== Hotfix (Emergency) ==
+note over Hotfix : Only for critical production issues
+
+RM -> Main : git checkout main
+activate RM #red
+RM -> Hotfix : git checkout -b hotfix/critical
+
+RM -> Hotfix : Fix critical issue
+RM -> Hotfix : git commit -m "fix: critical issue"
+
+RM -> Main : git checkout main
+RM -> Main : git merge --no-ff hotfix/critical
+RM -> Main : git tag -a v1.0.1
+
+RM -> Develop : git checkout develop
+RM -> Develop : git merge --no-ff hotfix/critical
+RM -> Hotfix : git branch -d hotfix/critical
+deactivate RM
+
+note right of Main
+  **Branch Rules**
+  - main: Always deployable
+  - develop: Integration
+  - feature/*: Single feature
+  - release/*: Release prep
+  - hotfix/*: Emergency only
+end note
+
+note right of Dev
+  **Naming Conventions**
+  - feature/add-login
+  - feature/api-v2
+  - release/1.2.0
+  - hotfix/security-fix
+end note
+
+note right of RM
+  **Release Checklist**
+  ☐ All tests pass
+  ☐ Version bumped
+  ☐ Changelog updated
+  ☐ Tag created
+  ☐ Deployed
+end note
+
+@enduml
