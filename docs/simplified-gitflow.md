@@ -4,7 +4,7 @@ Traditional branching model for small teams preferring manual control and predic
 
 ## Overview
 
-![Simplified GitFlow](images/simplified-gitflow.png)
+![Simplified GitFlow](https://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/keugenek/plantuml-ent-kit/fix/cleanup-gitflows-doc/docs/uml/simplified-gitflow.puml)
 
 ## Pattern Description
 
