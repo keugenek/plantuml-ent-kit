@@ -135,11 +135,7 @@ jobs:
           if git diff --staged --quiet; then
             echo "No new images to commit"
           else
-            git commit -m "🤖 Auto-render PlantUML diagrams
-
-Rendered PNG images from PlantUML source files.
-Triggered by: ${{ github.event_name }}
-Commit: ${{ github.sha }}"
+            git commit -m "🤖 Auto-render PlantUML diagrams [skip ci]"
             git push
             echo "✅ Images committed and pushed"
           fi
