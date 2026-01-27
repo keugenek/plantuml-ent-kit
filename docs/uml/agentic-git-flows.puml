@@ -1,0 +1,92 @@
+@startuml agentic-git-flows
+
+title Agentic Git Flows - Full Automation
+
+skinparam participant {
+    BackgroundColor #E8F5E9
+    BorderColor #2E7D32
+}
+
+skinparam actor {
+    BackgroundColor #C8E6C9
+}
+
+skinparam database {
+    BackgroundColor #FFF3E0
+    BorderColor #EF6C00
+}
+
+actor "Feature Request" as Request
+participant "AI Agent" as Agent
+participant "CI/CD Pipeline" as CI
+database "main" as Main
+database "release/*" as Release
+database "feature/*" as Feature
+database "task/*" as Task
+
+== Feature Initialization ==
+Request -> Agent : New feature request
+activate Agent
+Agent -> Agent : Analyze requirements
+Agent -> Feature : Create feature branch
+Agent -> Task : Create task branches
+
+== Autonomous Development ==
+loop For each task
+    Agent -> Task : Implement changes
+    Agent -> Agent : Run local tests
+    Agent -> Agent : Self-review code
+    Agent -> Task : Commit with conventional message
+end
+
+== Quality Gates ==
+Agent -> CI : Push feature branch
+activate CI
+CI -> CI : Run test suite
+CI -> CI : Static analysis
+CI -> CI : Security scan
+CI -> CI : Build validation
+alt All Checks Pass
+    CI --> Agent : ✅ Green status
+else Checks Fail
+    CI --> Agent : ❌ Failure report
+    Agent -> Agent : Auto-fix or rollback
+    Agent -> CI : Re-push
+end
+deactivate CI
+
+== Merge to Release ==
+Agent -> Agent : Generate PR description
+Agent -> Release : Create PR
+Agent -> Agent : Self-approve (if policy allows)
+Agent -> Release : Merge feature
+Agent -> Feature : Delete feature branch
+
+== Release Promotion ==
+Agent -> Agent : Check release criteria
+Agent -> Agent : Update changelog
+Agent -> Agent : Bump version
+Agent -> Main : Merge release
+Agent -> Main : Create version tag
+Agent --> Request : ✅ Feature deployed
+
+deactivate Agent
+
+note right of Agent
+  **Key Principles**
+  - No human intervention
+  - Feature flags for safety
+  - Automatic rollback on failure
+  - Full audit trail
+end note
+
+note right of CI
+  **Quality Gates**
+  - Unit tests (>80% coverage)
+  - Integration tests
+  - Linting & formatting
+  - Security vulnerabilities
+  - Performance benchmarks
+end note
+
+@enduml
