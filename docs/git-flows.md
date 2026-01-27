@@ -1,12 +1,16 @@
 # Git Workflows & Team Flows
 
+This document describes three branching strategies for PlantUML Entity Kit development.
+
 ## Overview
 
-This document describes three branching strategies for PlantUML Entity Kit development:
+![Git Workflows Diagram](images/git-flows.png)
 
-1. **Agentic Git Flows** — AI-driven automated branching
-2. **Agentic Team Flow** — Collaborative approach with agent oversight  
-3. **Simplified GitFlow** — Lightweight standard flow for small teams
+| Flow | Automation | Team Size | Best For |
+|------|------------|-----------|----------|
+| **Agentic Git Flows** | 100% | Any | AI-driven continuous deployment |
+| **Agentic Team Flow** | 80% | 3-10 | Human + AI collaboration |
+| **Simplified GitFlow** | Manual | 2-5 | Small teams, fixed release cycles |
 
 ---
 
@@ -15,6 +19,7 @@ This document describes three branching strategies for PlantUML Entity Kit devel
 Designed for AI agents to autonomously manage feature development, testing, and release workflows.
 
 ### Key Features
+
 - **No feature freeze** — continuous deployment with feature flags
 - **Automatic testing** — agents verify before merge
 - **Self-healing** — agents revert broken merges
@@ -22,7 +27,21 @@ Designed for AI agents to autonomously manage feature development, testing, and 
 - **Human override** — critical changes require approval
 
 ### Branch Structure
-main (production) ← release/* (candidates) ← feature/* (agent-driven)
+
+```
+main (production)
+  └── release/* (release candidates)
+        └── feature/* (agent-driven development)
+```
+
+### Workflow
+
+1. Agent creates `feature/*` branch from `release/*`
+2. Agent implements changes, runs tests
+3. Agent creates PR with auto-generated description
+4. CI validates, agent reviews test results
+5. Agent merges on green, or reverts on failure
+6. Release branch promotes to main on schedule
 
 ---
 
@@ -30,18 +49,36 @@ main (production) ← release/* (candidates) ← feature/* (agent-driven)
 
 Hybrid workflow: humans decide, agents execute.
 
+### Key Features
+
+- **Human oversight** — all merges require human approval
+- **Agent assistance** — automated testing, linting, security scans
+- **Communication** — Slack/Discord notifications, GitHub comments
+- **Weekly summaries** — automated progress reports
+
 ### Workflow
-1. Human creates PR
-2. Agent runs tests, lint, build, security checks
+
+```
+┌─────────────┐     ┌─────────────┐     ┌─────────────┐
+│   Human     │────>│   Agent     │────>│   Human     │
+│ Creates PR  │     │ Runs Checks │     │  Approves   │
+└─────────────┘     └─────────────┘     └─────────────┘
+                           │
+                           v
+                    ┌─────────────┐     ┌─────────────┐
+                    │   Agent     │────>│   Agent     │
+                    │   Merges    │     │  Deploys    │
+                    └─────────────┘     └─────────────┘
+```
+
+### Steps
+
+1. Human creates PR with description
+2. Agent runs: tests, lint, build, security checks
 3. Human reviews and approves
 4. Agent merges and updates release notes
 5. Team Lead triggers release
 6. Agent tags and deploys
-
-### Communication
-- Slack/Discord notifications
-- GitHub comments for feedback
-- Weekly email summaries
 
 ---
 
@@ -49,46 +86,84 @@ Hybrid workflow: humans decide, agents execute.
 
 Lightweight flow for small teams (2-5 people).
 
-### Branches
-- main: Production-ready (tagged)
-- develop: Integration
-- feature/*: Feature development
-- release/*: Release preparation  
-- hotfix/*: Production fixes
+### Branch Structure
+
+| Branch | Purpose | Lifetime |
+|--------|---------|----------|
+| `main` | Production-ready code (tagged) | Permanent |
+| `develop` | Integration branch | Permanent |
+| `feature/*` | Feature development | Temporary |
+| `release/*` | Release preparation | Temporary |
+| `hotfix/*` | Production fixes | Temporary |
 
 ### Workflow Example
-[?2004h[?1049h[22;0;0t[1;24r(B[m[4l[?7h[39;49m[?1h=[?1h=[?25l[39;49m(B[m[H[2J[22;34H(B[0;7m[ Reading... ](B[m[22;33H(B[0;7m[ Read 5 lines ](B[m[?12l[?25h[24;1H[?1049l[23;0;0t[?1l>[?2004l
+
+```bash
+# Create feature branch
+git checkout -b feature/add-login develop
+
+# Make changes and commit
+git add .
+git commit -m "Add login feature"
+
+# Push and create PR
+git push -u origin feature/add-login
+
+# After approval, merge to develop
+git checkout develop
+git merge --no-ff feature/add-login
+git branch -d feature/add-login
+```
 
 ### Advantages
-✅ Simple to understand
-✅ Small teams (2-5)
-✅ Stable releases
-✅ Clear separation
-✅ Minimal tooling
+
+- Simple to understand
+- Works well for small teams (2-5)
+- Produces stable releases
+- Clear separation of concerns
+- Minimal tooling required
 
 ---
 
-## Comparison
+## Comparison Matrix
 
 | Aspect | Agentic | Team | Simple |
 |--------|---------|------|--------|
-| Automation | 100% | 80% | 0% |
-| Team Size | Any | 3-10 | 2-5 |
-| Release | Continuous | Weekly | Monthly |
-| Complexity | High | Medium | Low |
-| Learning | Steep | Moderate | Easy |
-| CI/CD | Yes | Yes | No |
-| Oversight | Minimal | Moderate | High |
+| **Automation** | 100% | 80% | 0% |
+| **Team Size** | Any | 3-10 | 2-5 |
+| **Release Cadence** | Continuous | Weekly | Monthly |
+| **Complexity** | High | Medium | Low |
+| **Learning Curve** | Steep | Moderate | Easy |
+| **CI/CD Required** | Yes | Yes | No |
+| **Human Oversight** | Minimal | Moderate | High |
 
 ---
 
 ## Choosing Your Flow
 
-**Agentic Flows**: AI agents, continuous deployment, minimal intervention
+### Use Agentic Git Flows when:
+- Building AI-first development pipelines
+- Need continuous deployment with minimal intervention
+- Have robust testing infrastructure
+- Trust automated decision-making
 
-**Team Flow**: Humans + AI, weekly releases, human oversight  
+### Use Agentic Team Flow when:
+- Want AI assistance with human control
+- Weekly release cycles work for your team
+- Need audit trails and approval workflows
+- Balancing speed with oversight
 
-**Simplified GitFlow**: Small team, manual, fixed cycles
+### Use Simplified GitFlow when:
+- Small team (2-5 developers)
+- Monthly or scheduled releases
+- Simple projects without complex CI/CD
+- Team prefers manual control
+
+---
+
+## PlantUML Source
+
+See [uml/git-flows.puml](uml/git-flows.puml) for the diagram source.
 
 ---
 
