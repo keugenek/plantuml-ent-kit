@@ -1,0 +1,47 @@
+@startuml choosing-flow
+
+skinparam backgroundColor #FEFEFE
+skinparam shadowing false
+
+skinparam activity {
+    BackgroundColor #E3F2FD
+    BorderColor #1565C0
+    DiamondBackgroundColor #FFF3E0
+    DiamondBorderColor #EF6C00
+}
+
+skinparam activityDiamond {
+    BackgroundColor #FFF3E0
+    BorderColor #EF6C00
+}
+
+title Choosing Your Git Flow
+
+start
+
+if (Do you have\nAI agents?) then (Yes)
+    if (Need human\noversight?) then (Yes)
+        #E3F2FD:__Agentic Team Flow__
+        Human + AI collaboration
+        Weekly releases;
+        stop
+    else (No)
+        #E8F5E9:__Agentic Git Flows__
+        100% automated
+        Continuous deployment;
+        stop
+    endif
+else (No)
+    if (Team size?) then (2-5)
+        #FFF3E0:__Simplified GitFlow__
+        Manual process
+        Monthly releases;
+        stop
+    else (>5)
+        #E3F2FD:Consider __Team Flow__
+        or other strategies;
+        stop
+    endif
+endif
+
+@enduml
