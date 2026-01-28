@@ -1,0 +1,52 @@
+@startuml vendor-fork-flow
+!theme plain
+skinparam backgroundColor #FEFEFE
+skinparam defaultFontName Inter
+
+title Vendor Fork Flow
+
+skinparam rectangle {
+    BackgroundColor<<upstream>> #E8F5E9
+    BackgroundColor<<vendor>> #E3F2FD
+    BackgroundColor<<main>> #FFF3E0
+    BackgroundColor<<feature>> #F3E5F5
+    BackgroundColor<<vendorfeature>> #FFEBEE
+}
+
+rectangle "**upstream/main**\n(vendor's repo - read-only)" as upstream <<upstream>> {
+    note right: Fetch only\nNever commit
+}
+
+rectangle "**vendor/main**\n(clean tracking branch)" as vendor <<vendor>> {
+    note right: Sync point\nNo custom code
+}
+
+rectangle "**main**\n(production + customizations)" as main <<main>> {
+    note right: Our production\nTagged releases
+}
+
+rectangle "**feature/***\n(custom development)" as feature <<feature>> {
+    note right: Our features\nPR to main
+}
+
+rectangle "**vendor-feature/***\n(upstream contributions)" as vendorfeature <<vendorfeature>> {
+    note right: Contribute back\nPR to upstream
+}
+
+upstream -down-> vendor : "git fetch upstream\ngit merge"
+vendor -down-> main : "git merge vendor/main\n(resolve conflicts)"
+main -down-> feature : "git checkout -b"
+feature -up-> main : "PR + merge"
+vendor -down-> vendorfeature : "git checkout -b"
+vendorfeature -up-> upstream : "PR to upstream repo"
+
+legend right
+    |= Color |= Branch Type |
+    | <#E8F5E9> | Upstream (read-only) |
+    | <#E3F2FD> | Vendor tracking |
+    | <#FFF3E0> | Production |
+    | <#F3E5F5> | Custom features |
+    | <#FFEBEE> | Upstream contributions |
+endlegend
+
+@enduml
