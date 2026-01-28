@@ -11,6 +11,8 @@ For projects maintaining a fork of external vendor code (OpenWebUI, Supabase, n8
 
 This workflow enables tracking upstream changes while maintaining custom modifications. It separates vendor code from customizations for clean upgrades.
 
+![Vendor Fork Flow](images/vendor-fork-flow.png)
+
 ## Branch Structure
 
 ```
