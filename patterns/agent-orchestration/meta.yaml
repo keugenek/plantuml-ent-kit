@@ -1,0 +1,11 @@
+name: Agent Orchestration
+category: ai-patterns
+tags: [agents, orchestration, multi-agent, supervisor]
+complexity: advanced
+diagram_type: sequence
+description: Multi-agent coordination with supervisor patterns for complex task decomposition
+use_cases:
+  - Complex task automation
+  - Multi-step workflows
+  - Collaborative AI systems
+related: [skills-pattern, tool-chaining]

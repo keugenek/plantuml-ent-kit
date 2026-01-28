@@ -1,0 +1,11 @@
+name: LLM Tool Call
+category: ai-patterns
+tags: [llm, tools, function-calling, api]
+complexity: beginner
+diagram_type: sequence
+description: Function calling pattern enabling LLMs to invoke external tools and APIs
+use_cases:
+  - API integrations
+  - Database queries
+  - External service calls
+related: [tool-chaining, mcp-architecture]

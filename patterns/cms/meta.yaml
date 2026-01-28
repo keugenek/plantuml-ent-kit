@@ -1,0 +1,11 @@
+name: CMS Entity Model
+category: entity-models
+tags: [cms, content, database, pages, articles]
+complexity: beginner
+diagram_type: entity
+description: Content Management System entity-relationship model
+use_cases:
+  - Websites
+  - Blogs
+  - Digital publishing
+related: [lms, ecomm]

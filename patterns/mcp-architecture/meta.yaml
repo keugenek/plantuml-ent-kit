@@ -1,0 +1,11 @@
+name: Model Context Protocol (MCP)
+category: ai-patterns
+tags: [mcp, anthropic, protocol, tools, servers]
+complexity: intermediate
+diagram_type: component
+description: Anthropic's standardized protocol for AI-tool integration
+use_cases:
+  - Tool standardization
+  - AI platform integration
+  - Plugin systems
+related: [llm-tool-call, tool-chaining]

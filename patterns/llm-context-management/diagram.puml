@@ -1,0 +1,130 @@
+@startuml
+
+title LLM Context Management Principles
+
+skinparam backgroundColor #FEFEFE
+skinparam package {
+    BackgroundColor #F5F5F5
+    BorderColor #424242
+}
+
+' === CONTEXT PROBLEMS ===
+package "Context Problems" as Problems #FFEBEE {
+    component "Context Rot" as Rot
+    component "Lost in Middle" as LostMiddle
+    component "Context Pollution" as Pollution
+    component "Token Limits" as Limits
+}
+
+note bottom of Problems
+  Performance degrades at ~25%
+  of max context window
+end note
+
+' === ISOLATION STRATEGIES ===
+package "Isolation Strategies" as Isolation #E3F2FD {
+    component "Subagents" as Subagents
+    component "Tool Sandboxing" as Sandbox
+    component "Scoped Context" as Scoped
+}
+
+note right of Subagents
+  Each agent gets own
+  context window
+end note
+
+' === REDUCTION STRATEGIES ===
+package "Reduction Strategies" as Reduction #E8F5E9 {
+    component "Compaction" as Compaction
+    component "Summarization" as Summary
+    component "Tool Result Clearing" as ToolClear
+    component "Observation Masking" as ObsMask
+}
+
+note right of Compaction
+  Reversible: strips
+  redundant data
+end note
+
+note right of Summary
+  Lossy: LLM condenses
+  history (60-70% reduction)
+end note
+
+' === EXTERNAL MEMORY ===
+package "External Memory" as External #FFF3E0 {
+    component "RAG Retrieval" as RAG
+    component "Vector Store" as Vector
+    component "Knowledge Base" as KB
+    database "Long-term Store" as LongTerm
+}
+
+note bottom of External
+  O(1) retrieval vs
+  O(n) context scanning
+end note
+
+' === WINDOWING STRATEGIES ===
+package "Windowing Strategies" as Windowing #F3E5F5 {
+    component "Sliding Window" as Sliding
+    component "Chunking" as Chunk
+    component "Overlap Regions" as Overlap
+}
+
+' === HIERARCHICAL MEMORY ===
+package "Hierarchical Memory" as Hierarchy #E0F7FA {
+    component "Short-term\n(verbatim)" as ShortTerm
+    component "Medium-term\n(summaries)" as MediumTerm
+    component "Long-term\n(RAG/DB)" as LongTermMem
+}
+
+' === MONITORING ===
+package "Monitoring" as Monitor #FFF9C4 {
+    component "Token Counter" as TokenCount
+    component "Rot Threshold" as Threshold
+    component "Auto-Compaction" as AutoCompact
+}
+
+' === CENTRAL AGENT ===
+actor "LLM Agent" as Agent
+
+' === RELATIONSHIPS ===
+
+' Problems flow into solutions
+Rot --> Reduction : solved by
+Pollution --> Isolation : solved by
+LostMiddle --> Windowing : solved by
+Limits --> External : solved by
+
+' Agent uses strategies
+Agent --> Isolation : delegates to
+Agent --> Reduction : applies
+Agent --> External : queries
+Agent --> Windowing : processes with
+Agent --> Hierarchy : stores in
+Agent --> Monitor : tracks via
+
+' Internal flows
+Subagents --> Scoped : uses
+RAG --> Vector : searches
+Vector --> KB : indexes
+Sliding --> Overlap : maintains
+TokenCount --> Threshold : triggers
+Threshold --> AutoCompact : initiates
+AutoCompact --> Summary : may use
+AutoCompact --> Compaction : prefers
+
+' Hierarchy connections
+ShortTerm --> MediumTerm : summarizes to
+MediumTerm --> LongTermMem : archives to
+
+legend right
+  |= Priority |= Strategy |
+  | 1st | Compaction (reversible) |
+  | 2nd | Tool Result Clearing |
+  | 3rd | Subagent Isolation |
+  | 4th | Summarization (lossy) |
+  | 5th | RAG for static knowledge |
+endlegend
+
+@enduml

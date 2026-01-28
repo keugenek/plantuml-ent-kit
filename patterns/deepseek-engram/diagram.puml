@@ -1,0 +1,75 @@
+@startuml
+
+title DeepSeek Engram: Conditional Memory via N-gram Lookup
+
+skinparam backgroundColor #FEFEFE
+
+actor "Input Tokens" as Input
+
+package "Tokenizer Compression" as Tokenizer #F3E5F5 {
+    component "Canonical Mapping" as Canon
+}
+
+package "Engram Module" as Engram #E8F5E9 {
+    component "N-gram Extractor" as NGram
+    component "Hash Head 1" as H1
+    component "Hash Head 2" as H2
+    component "Hash Head K" as HK
+    database "Embedding Table" as EmbedTable
+    component "Concatenate" as Concat
+}
+
+package "Neural Backbone" as Backbone #FFEBEE {
+    component "Attention" as Attention
+    component "MoE Layer" as MoE
+    component "Hidden States" as Hidden
+}
+
+package "Gating" as Gate #FFF9C4 {
+    component "Context Gate" as ContextGate
+}
+
+component "Fused Output" as Output
+
+' Tokenizer flow
+Input --> Canon
+Canon --> NGram : compressed
+
+' Hash flow
+NGram --> H1
+NGram --> H2
+NGram --> HK
+H1 --> EmbedTable
+H2 --> EmbedTable
+HK --> EmbedTable
+EmbedTable --> Concat
+
+' Neural flow
+Input --> Attention
+Attention --> MoE
+MoE --> Hidden
+
+' Fusion
+Hidden --> ContextGate
+Concat --> ContextGate
+ContextGate --> Output
+
+note right of EmbedTable
+  O(1) lookup
+  System RAM
+end note
+
+note right of ContextGate
+  Filters memory
+  by context
+end note
+
+note bottom of Engram
+  20-25% of parameters
+end note
+
+note bottom of Backbone
+  75-80% of parameters
+end note
+
+@enduml

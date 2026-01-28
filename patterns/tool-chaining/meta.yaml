@@ -1,0 +1,11 @@
+name: Tool Chaining
+category: ai-patterns
+tags: [tools, chaining, workflow, pipeline]
+complexity: beginner
+diagram_type: component
+description: Sequential tool execution with data flow between steps
+use_cases:
+  - Multi-step automation
+  - Data pipelines
+  - Workflow orchestration
+related: [llm-tool-call, agent-orchestration]

@@ -1,0 +1,11 @@
+name: Skills Pattern
+category: ai-patterns
+tags: [skills, agents, modular, capabilities]
+complexity: intermediate
+diagram_type: component
+description: Composable agent capabilities as modular, reusable skill units
+use_cases:
+  - Modular AI systems
+  - Capability extension
+  - Agent customization
+related: [agent-orchestration, tool-chaining]

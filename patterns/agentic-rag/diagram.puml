@@ -1,0 +1,41 @@
+@startuml
+
+title Agentic RAG Architecture
+
+skinparam component {
+    BackgroundColor #E3F2FD
+    BorderColor #1565C0
+}
+
+actor "User" as User
+
+component "Query Encoder" as QueryEncoder
+component "Document Encoder" as DocumentEncoder
+component "Retriever" as Retriever
+component "Generator" as Generator
+
+database "Knowledge Base" as KnowledgeBase
+
+User --> QueryEncoder : User query
+QueryEncoder --> Retriever : Query embedding
+DocumentEncoder --> KnowledgeBase : Document embeddings
+KnowledgeBase --> Retriever : Relevant embeddings
+Retriever --> Generator : Retrieved documents
+Generator --> User : Generated response
+
+note right of QueryEncoder
+  Encodes user query
+  into dense vector
+end note
+
+note right of KnowledgeBase
+  Stores document embeddings
+  and metadata
+end note
+
+note right of Generator
+  Generates response using
+  query + retrieved docs
+end note
+
+@enduml

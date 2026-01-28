@@ -1,0 +1,70 @@
+@startuml
+
+title Skills Pattern - Composable Agent Capabilities
+
+skinparam component {
+    BackgroundColor #E8F5E9
+    BorderColor #2E7D32
+}
+
+skinparam package {
+    BackgroundColor #FAFAFA
+    BorderColor #616161
+}
+
+actor "User" as User
+
+component "Agent" as Agent
+component "Skill Router" as Router
+
+package "Skill Registry" as Registry {
+    component "Code Skill" as CodeSkill
+    component "Research Skill" as ResearchSkill
+    component "Data Analysis Skill" as DataSkill
+    component "Communication Skill" as CommSkill
+}
+
+package "Skill Resources" as Resources {
+    database "Code Repos" as Repos
+    database "Knowledge Base" as KB
+    database "Data Sources" as Data
+    collections "APIs" as APIs
+}
+
+User --> Agent : Complex request
+Agent --> Router : Analyze & route
+
+Router --> CodeSkill : Code tasks
+Router --> ResearchSkill : Information gathering
+Router --> DataSkill : Analytics tasks
+Router --> CommSkill : Output formatting
+
+CodeSkill --> Repos : Read/Write code
+ResearchSkill --> KB : Search documents
+DataSkill --> Data : Query & analyze
+CommSkill --> APIs : Send notifications
+
+CodeSkill --> Router : Code artifacts
+ResearchSkill --> Router : Research findings
+DataSkill --> Router : Analysis results
+CommSkill --> Router : Formatted output
+
+Router --> Agent : Combined results
+Agent --> User : Synthesized response
+
+note right of Registry
+  Skills are:
+  * Self-contained
+  * Composable
+  * Reusable
+  * Specialized
+end note
+
+note bottom of Router
+  Router handles:
+  * Skill selection
+  * Parallel execution
+  * Result aggregation
+end note
+
+@enduml

@@ -1,0 +1,11 @@
+name: CRM Entity Model
+category: entity-models
+tags: [crm, database, entities, customers, sales]
+complexity: beginner
+diagram_type: entity
+description: Customer Relationship Management entity-relationship model
+use_cases:
+  - Customer management systems
+  - Sales tracking
+  - Contact management
+related: [ecomm, lms]

@@ -1,0 +1,58 @@
+@startuml
+
+!define table(x) class x << (T,#FFAAAA) >>
+!define primary_key(x) <b>x</b>
+!define foreign_key(x) <color:red>x</color>
+
+table(Course) {
+  +primary_key(CourseID): int
+  CourseName: varchar(255)
+  Description: text
+  +foreign_key(InstructorID): int
+}
+
+table(Instructor) {
+  +primary_key(InstructorID): int
+  FirstName: varchar(255)
+  LastName: varchar(255)
+  Email: varchar(255)
+}
+
+table(Student) {
+  +primary_key(StudentID): int
+  FirstName: varchar(255)
+  LastName: varchar(255)
+  Email: varchar(255)
+}
+
+table(Enrollment) {
+  +primary_key(EnrollmentID): int
+  +foreign_key(StudentID): int
+  +foreign_key(CourseID): int
+  EnrollmentDate: date
+}
+
+table(Assignment) {
+  +primary_key(AssignmentID): int
+  +foreign_key(CourseID): int
+  AssignmentName: varchar(255)
+  Description: text
+  DueDate: date
+}
+
+table(Grade) {
+  +primary_key(GradeID): int
+  +foreign_key(StudentID): int
+  +foreign_key(AssignmentID): int
+  Score: decimal(5,2)
+  Feedback: text
+}
+
+Course -- Instructor : taught by
+Course -- Enrollment : has
+Course -- Assignment : has
+Enrollment -- Student : has
+Assignment -- Grade : has
+Grade -- Student : assigned to
+
+@enduml

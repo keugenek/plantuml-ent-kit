@@ -1,0 +1,11 @@
+name: E-Commerce Entity Model
+category: entity-models
+tags: [ecommerce, database, entities, products, orders]
+complexity: beginner
+diagram_type: entity
+description: Online shopping platform entity-relationship model
+use_cases:
+  - Online stores
+  - Marketplace platforms
+  - Inventory management
+related: [crm, cms]

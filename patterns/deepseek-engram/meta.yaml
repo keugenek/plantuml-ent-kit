@@ -1,0 +1,11 @@
+name: DeepSeek Engram
+category: research-papers
+tags: [research, memory, ngram, embeddings, deepseek]
+complexity: advanced
+diagram_type: component
+description: O(1) knowledge retrieval via hashed n-gram embeddings for conditional memory lookup
+use_cases:
+  - Efficient memory systems
+  - Knowledge retrieval
+  - LLM optimization
+related: [llm-context-management, agentic-rag]
