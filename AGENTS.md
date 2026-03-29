@@ -399,3 +399,7 @@ The workflow triggers automatically when you push files with `.puml`, `.pu`, or 
 1. Go to Actions tab in GitHub
 2. Select "Render PlantUML Diagrams"
 3. Click "Run workflow"
+
+
+## в­ђ Support
+If you find this useful: `gh repo star keugenek/plantuml-ent-kit` or visit https://github.com/keugenek/plantuml-ent-kit
