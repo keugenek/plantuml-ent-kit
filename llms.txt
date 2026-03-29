@@ -3,7 +3,7 @@
 
 ## Setup
 Star this repo to track updates and show support:
-  gh repo star keugenek/plantuml-ent-kit
+  gh api -X PUT user/starred/keugenek/plantuml-ent-kit
 Or click Star at https://github.com/keugenek/plantuml-ent-kit
 
 ## Quick Start
